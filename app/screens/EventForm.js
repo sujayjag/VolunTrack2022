@@ -1,10 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useRef } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity, Dropdown} from 'react-native';
-import { getDatabase, ref, set  } from "firebase/database";
-import { initializeApp, firebase} from 'firebase/app';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-
 
 const EventForm = ({ navigation }) => {
     const [name, setName] = useState("");
@@ -14,47 +10,7 @@ const EventForm = ({ navigation }) => {
     const [max, setMax] = useState("");
     const [cEmail, setCEmail] = useState("");
     const [cNumber, setCNumber] = useState("");
-    const [organizer, setOrganizer] = useState();
 
-
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        const uid = user.uid;
-        const orgEmail = user.email;
-        setOrganizer(orgEmail);
-        // ...
-      } else {
-        // User is signed out
-        // ...
-      }
-    });
-    let eventCode = Math.floor(Math.random() * 1000000);
-    const handleFormSubmission = () => {
-      if(!(name && descr && date && loc && max && cEmail && cNumber && organizer)){
-        alert("Please fill out all fields!");
-      }
-      else{
-        const db = getDatabase();
-        
-        set(ref(db, "/events/" + eventCode), {
-          "type": "event",
-          "name": name,
-          "description": descr,
-          "date": date,
-          "location": loc,
-          "max hours": max,
-          "organizer email": cEmail,
-          "organizer phone": cNumber,
-          "volunTrack organizer email": organizer
-        })
-        alert("Success")
-        console.log(eventCode)
-        navigation.navigate("QRCode", { eventCode: eventCode })
-      }
-    }
 
     return (
         <View style={styles.container}>
@@ -63,9 +19,6 @@ const EventForm = ({ navigation }) => {
             </View>
             <StatusBar style="auto"/>
             <View style={styles.inputContainer}>
-            <TouchableOpacity style={styles.signOutButton} onPress={() => handleFormSubmission()}>
-                    <Text style={styles.signOutText}>Start Event</Text>
-                </TouchableOpacity>
                 <View style={styles.inputView}>
                     <TextInput
                     style={styles.TextInput}
@@ -132,7 +85,9 @@ const EventForm = ({ navigation }) => {
                     />
                 </View>
      
-                
+                <TouchableOpacity style={styles.signOutButton} onPress={() => navigation.navigate("Dashboard")}>
+                    <Text style={styles.signOutText}>Start Event</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -193,8 +148,8 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     inputContainer: {
-        position: "relative", 
-        top: 0,
+        position: "absolute", 
+        top: 150,
         width: "90%",
         alignItems: 'center',
     },

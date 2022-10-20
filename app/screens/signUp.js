@@ -3,8 +3,10 @@ import React, { useState, useRef, Component } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, ref, set  } from "firebase/database";
-import { initializeApp, firebase} from 'firebase/app';
+import { doc, setDoc, addDoc, collection, getFirestore } from "firebase/firestore";
+import { initializeApp, firebase } from 'firebase/app';
+
+//import firebaseConfig from '../../db/firebaseConfig.js';
 
 const firebaseApp = initializeApp({
   apiKey: "AIzaSyCtSa-qK2xb-Wky_vszWWACyTqru9c9l94",
@@ -15,36 +17,6 @@ const firebaseApp = initializeApp({
   appId: "1:237292785966:web:8813a69013f743a1afaabf",
   measurementId: "G-KN9SKC5DYZ"
 });
-
-
-const saveUserData = (first, last, emailAddress, phoneNumber) => {
-  const db = getDatabase();
-  set(ref(db, "/users/" + phoneNumber), {
-    
-  
-      "type": "user",
-      "email": emailAddress,
-      "fName": first,
-      "lName": last,
-      "phoneNum": phoneNumber,
-      "role": null,
-      "volunteeredEvents": {},
-      "createdEvents": {}
-  })
-/*{"id": "M2zB52PGYyjHOiA3lfjB",
-  "properties": {
-  
-  "type": "user",
-  "email": "john@gmail.com",
-  "fName": "john",
-  "lName": "duck",
-  "phoneNum": 1234567890,
-  "role": null,
-  "volunteeredEvents": {},
-  "createdEvents": {}
-
-}} */
-}
 
   const validateNumber = num => {
     num = num.replace(/\D/g,'');
@@ -87,12 +59,23 @@ const saveUserData = (first, last, emailAddress, phoneNumber) => {
         setPhone(p);
 
         const auth = getAuth();
-        createUserWithEmailAndPassword(auth, e, pass)
+        createUserWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
+        // Signed in 
             
+            //const db = firebase.firestore();
+            //const newUser = db.collection("User")
+            firebase.firestore().collection('User').add({
+              email: email,
+              fName: fname,
+              lName: lname,
+              phoneNum: phone
+            })
+              
             const user = userCredential.user;
-            saveUserData(f, l, e, p)
             navigation.navigate("Dashboard");
+            
+            
         
             
           })
