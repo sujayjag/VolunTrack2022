@@ -1,0 +1,15 @@
+
+
+{"users":[{"id": "M2zB52PGYyjHOiA3lfjB",
+  "properties": {
+  
+  "type": "user",
+  "email": "john@gmail.com",
+  "fName": "john",
+  "lName": "duck",
+  "phoneNum": 1234567890,
+  "role": null,
+  "volunteeredEvents": {},
+  "createdEvents": {}
+
+}}]}
