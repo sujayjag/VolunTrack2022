@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button, Alert } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { createStackNavigator, createAppContainer } from 'react-navigation';  
+//import { createStackNavigator, createAppContainer } from 'react-navigation';  
 
 export default function Join() {
   const [hasPermission, setHasPermission] = useState(null);
