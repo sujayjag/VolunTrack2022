@@ -65,12 +65,12 @@ const firebaseApp = initializeApp({
             
             //const db = firebase.firestore();
             //const newUser = db.collection("User")
-            firebase.firestore().collection('User').add({
-              email: email,
-              fName: fname,
-              lName: lname,
-              phoneNum: phone
-            })
+            // firebase.firestore().collection('User').add({
+            //   email: email,
+            //   fName: fname,
+            //   lName: lname,
+            //   phoneNum: phone
+            // })
               
             const user = userCredential.user;
             navigation.navigate("Dashboard");

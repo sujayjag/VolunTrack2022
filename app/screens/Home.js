@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
         height: 50,
     },
     logoContainer: {
+        marginTop: 30,
         position: "absolute", 
         top: 70,
         alignItems: 'center',
