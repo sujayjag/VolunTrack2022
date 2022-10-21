@@ -63,13 +63,13 @@ const firebaseApp = initializeApp({
           .then((userCredential) => {
         // Signed in 
             
-            // const db = firebase.firestore();
-            // const newUser = db.collection("User")
+            //const db = firebase.firestore();
+            //const newUser = db.collection("User")
             // firebase.firestore().collection('User').add({
-            //  email: email,
-            //  fName: fname,
-            //  lName: lname,
-            //  phoneNum: phone
+            //   email: email,
+            //   fName: fname,
+            //   lName: lname,
+            //   phoneNum: phone
             // })
               
             const user = userCredential.user;
