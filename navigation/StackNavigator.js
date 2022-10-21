@@ -23,7 +23,7 @@ const MainStackNavigator = () => {
     <Stack.Navigator 
         screenOptions={{
         headerStyle: {
-          backgroundColor: "#9AC4F8",
+          backgroundColor: "#ed80bb",
         },
         headerTintColor: "white",
         headerBackTitle: "Back",
