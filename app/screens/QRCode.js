@@ -22,8 +22,6 @@ const QRCode = ({ navigation }) => {
     );
 };
 
-// test
-
 const styles = StyleSheet.create({
     cont: {
         flex: 1,
@@ -33,7 +31,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -41,14 +39,14 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     saveButton: {
-        width: "80%",
+        width: 150,
         borderRadius: 25,
         height: 50,
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#FF1493",
         marginBottom: 30,
-        marginTop: 200,
+        marginTop: 300,
     },
     saveText: {
         alignItems: 'center',
@@ -60,7 +58,7 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     shareButton: {
-        width: "80%",
+        width: 150,
         borderRadius: 25,
         height: 50,
         alignItems: "center",
@@ -83,6 +81,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#FF1493",
+        marginBottom: 20,
     },
     homeText: {
         alignItems: 'center',
