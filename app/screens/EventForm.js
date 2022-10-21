@@ -11,13 +11,15 @@ const EventForm = ({ navigation }) => {
     const [max, setMax] = useState("");
     const [cEmail, setCEmail] = useState("");
     const [cNumber, setCNumber] = useState("");
-
-
+    
+    //const eventId = Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)
+   
     return (
         <View style={styles.container}>
             <View style={styles.logoContainer}>
                 <Text style={styles.titleText}>Event Form</Text>
-            </View>
+            </View>          
+
             <StatusBar style="auto"/>
             <View style={styles.inputContainer}>
                 <View style={styles.inputView}>
@@ -95,7 +97,8 @@ const EventForm = ({ navigation }) => {
                     />
                 </View>
      
-                <TouchableOpacity style={styles.signOutButton} onPress={() => navigation.navigate("QRCode")}>
+                <TouchableOpacity style={styles.signOutButton} onPress={() => navigation.navigate("GenerateCode", 
+                  {eId: Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)})}>
                     <Text style={styles.signOutText}>Start Event</Text>
                 </TouchableOpacity>
             </View>
