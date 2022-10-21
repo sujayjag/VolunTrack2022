@@ -1,23 +1,58 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
+import QRCode from 'react-qr-code';
 
-const QRCode = ({ navigation }) => {
+const GenerateCode = ({ route, navigation }) => {
+    const { eId } = route.params;
+    const eventId = JSON.stringify(eId);
+
+    // const eventId = navigation.getParam('eId');
+    //comment
+
     return (
         <View style={styles.cont}>
+            <View style={{justifyContent: 'space-between'}}>
+                <Text style={styles.titleText}></Text>
+            </View>
+            <View style={{justifyContent: 'space-between'}}>
+                <Text style={styles.titleText}></Text>
+            </View>
+            <View style={{justifyContent: 'space-between'}}>
+                <Text style={styles.titleText}></Text>
+            </View>
+            <View style={{justifyContent: 'space-between'}}>
+                <Text style={styles.titleText}></Text>
+            </View>
+            <Text>Code: {eventId}</Text>
+
+            <QRCode
+      value={eventId}
+    />
 
             <View style={styles.container}>
-                <TouchableOpacity style={styles.saveButton} onPress={() => navigation.navigate("Home")}>
+                <TouchableOpacity style={styles.saveButton} onPress={() => navigation.navigate("Dashboard")}>
                     <Text style={styles.saveText}>Save</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate("Home")}>
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
+                </View>
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
+                </View>
+                <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate("Dashboard")}>
                     <Text style={styles.shareText}>Share</Text>
                 </TouchableOpacity>
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
+                </View>
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
+                </View>
+                <TouchableOpacity style={styles.homeButton} onPress={() => navigation.navigate("Dashboard")}>
+                    <Text style={styles.homeText}>Go Home</Text>
+                </TouchableOpacity>
             </View>
-
-            <TouchableOpacity style={styles.homeButton} onPress={() => navigation.navigate("EventForm")}>
-                <Text style={styles.homeText}>Go Home</Text>
-            </TouchableOpacity>
         </View>
     );
 };
@@ -39,14 +74,14 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     saveButton: {
-        width: 150,
+        width: 250,
         borderRadius: 25,
         height: 50,
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#FF1493",
         marginBottom: 30,
-        marginTop: 300,
+        marginTop: 200,
     },
     saveText: {
         alignItems: 'center',
@@ -58,7 +93,7 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     shareButton: {
-        width: 150,
+        width: 250,
         borderRadius: 25,
         height: 50,
         alignItems: "center",
@@ -75,13 +110,14 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     homeButton: {
-        width: "80%",
+        width: 250,
         borderRadius: 25,
         height: 50,
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#FF1493",
-        marginBottom: 20,
+        marginBottom: 200,
+        marginTop: 30,
     },
     homeText: {
         alignItems: 'center',
@@ -94,4 +130,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default QRCode;
+export default GenerateCode;
