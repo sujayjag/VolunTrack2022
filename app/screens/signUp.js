@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, addDoc, collection, getFirestore } from "firebase/firestore";
 import { initializeApp, firebase } from 'firebase/app';
+import { getDatabase, ref, set, child, update, remove } from "firebase/database";
 
 //import firebaseConfig from '../../db/firebaseConfig.js';
 
@@ -15,8 +16,11 @@ const firebaseApp = initializeApp({
   storageBucket: "voluntrack-ba589.appspot.com",
   messagingSenderId: "237292785966",
   appId: "1:237292785966:web:8813a69013f743a1afaabf",
-  measurementId: "G-KN9SKC5DYZ"
+  measurementId: "G-KN9SKC5DYZ",
+  databaseURL: "https://voluntrack-ba589-default-rtdb.firebaseio.com/"
 });
+
+const db = getDatabase(firebaseApp);
 
   const validateNumber = num => {
     num = num.replace(/\D/g,'');
@@ -33,6 +37,24 @@ const firebaseApp = initializeApp({
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    
+    
+    function insertData(uid) {
+      set(ref(db, "Users/" + uid),{
+        Email: email,
+        Fname: fname,
+        Lname: lname,
+        Phone: phone,
+      })
+      .then(() => {
+        alert("Data Stored Successfully!");
+        navigation.navigate("Dashboard");   
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        alert(errorMessage);
+      });
+    }
 
     const validateFields = (f, l, p, e, pass, c) => {
       let phoneRe = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/
@@ -59,6 +81,7 @@ const firebaseApp = initializeApp({
         setPhone(p);
 
         const auth = getAuth();
+        const uid = auth.CurrentUser.UserId
         createUserWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
         // Signed in 
@@ -71,7 +94,7 @@ const firebaseApp = initializeApp({
             //   lName: lname,
             //   phoneNum: phone
             // })
-              
+            insertData(uid);
             const user = userCredential.user;
             navigation.navigate("Dashboard");
             
@@ -155,7 +178,7 @@ const firebaseApp = initializeApp({
                     />
                 </View>
 
-                <TouchableOpacity style={styles.signUpButton} onPress={() => validateFields(fname, lname, phone, email, password, confirmPassword)}>
+                <TouchableOpacity style={styles.signUpButton} onPress={() => { validateFields(fname, lname, phone, email, password, confirmPassword) }}>
                     <LinearGradient
                         start={{x: 0, y: 0}} end={{x: 1, y: 0}}
                         colors={['#FBD786', '#f7797d']} style={styles.signUpButton}>
