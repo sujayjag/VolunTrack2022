@@ -1,10 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
+import QRCode from 'react-qr-code';
 
-const QRCode = ({ navigation }) => {
+const GenerateCode = ({ route, navigation }) => {
+    const { eId } = route.params;
+    const eventId = JSON.stringify(eId);
+
+    // const eventId = navigation.getParam('eId');
+
     return (
         <View style={styles.cont}>
+            <Text>Code: {eventId}</Text>
+
+            <QRCode
+      value={eventId}
+    />
 
             <View style={styles.container}>
                 <TouchableOpacity style={styles.saveButton} onPress={() => navigation.navigate("Home")}>
@@ -94,4 +105,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default QRCode;
+export default GenerateCode;
