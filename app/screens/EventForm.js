@@ -5,7 +5,8 @@ import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image,
 const EventForm = ({ navigation }) => {
     const [name, setName] = useState("");
     const [descr, setDesc] = useState("");
-    const [date, setDate] = useState(""); 
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState(""); 
     const [loc, setLoc] = useState(""); 
     const [max, setMax] = useState("");
     const [cEmail, setCEmail] = useState("");
@@ -42,10 +43,19 @@ const EventForm = ({ navigation }) => {
                 <View style={styles.inputView}>
                     <TextInput
                     style={styles.TextInput}
-                    placeholder="Date and Time (ex 10/24/2021 9:45am)"
+                    placeholder="Start DateTime (ex. 10/21/2022 09:30)"
                     placeholderTextColor="#003f5c"
                     autoCorrect="False"
-                    onChangeText={(date) => setDate(date)}
+                    onChangeText={(startDate) => setStartDate(startDate)}
+                    />
+                </View>
+                <View style={styles.inputView}>
+                    <TextInput
+                    style={styles.TextInput}
+                    placeholder="End DateTime (ex. 10/21/2022 13:30)"
+                    placeholderTextColor="#003f5c"
+                    autoCorrect="False"
+                    onChangeText={(endDate) => setEndDate(endDate)}
                     />
                 </View>
                 <View style={styles.inputView}>
@@ -118,7 +128,7 @@ const styles = StyleSheet.create({
     inputView: {
         backgroundColor: "#FFC0CB",
         borderRadius: 30,
-        width: "70%",
+        width: "85%",
         height: 45,
         marginBottom: 10,
         marginTop: 15,
@@ -130,12 +140,12 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     signOutButton: {
-        width: "80%",
+        width: "85%",
         borderRadius: 25,
         height: 50,
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 40,
+        marginTop: 20,
         backgroundColor: "#FF1493",
       },
     signOutText: {
@@ -149,7 +159,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         position: "absolute", 
-        top: 150,
+        top: 90,
         width: "90%",
         alignItems: 'center',
     },
