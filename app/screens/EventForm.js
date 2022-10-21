@@ -5,21 +5,18 @@ import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image,
 const EventForm = ({ navigation }) => {
     const [name, setName] = useState("");
     const [descr, setDesc] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState(""); 
+    const [date, setDate] = useState(""); 
     const [loc, setLoc] = useState(""); 
     const [max, setMax] = useState("");
     const [cEmail, setCEmail] = useState("");
     const [cNumber, setCNumber] = useState("");
-    
-    //const eventId = Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)
-   
+
+
     return (
         <View style={styles.container}>
             <View style={styles.logoContainer}>
                 <Text style={styles.titleText}>Event Form</Text>
-            </View>          
-
+            </View>
             <StatusBar style="auto"/>
             <View style={styles.inputContainer}>
                 <View style={styles.inputView}>
@@ -45,19 +42,10 @@ const EventForm = ({ navigation }) => {
                 <View style={styles.inputView}>
                     <TextInput
                     style={styles.TextInput}
-                    placeholder="Start DateTime (ex. 10/21/2022 09:30)"
+                    placeholder="Date and Time (ex 10/24/2021 9:45am)"
                     placeholderTextColor="#003f5c"
                     autoCorrect="False"
-                    onChangeText={(startDate) => setStartDate(startDate)}
-                    />
-                </View>
-                <View style={styles.inputView}>
-                    <TextInput
-                    style={styles.TextInput}
-                    placeholder="End DateTime (ex. 10/21/2022 13:30)"
-                    placeholderTextColor="#003f5c"
-                    autoCorrect="False"
-                    onChangeText={(endDate) => setEndDate(endDate)}
+                    onChangeText={(date) => setDate(date)}
                     />
                 </View>
                 <View style={styles.inputView}>
@@ -97,8 +85,7 @@ const EventForm = ({ navigation }) => {
                     />
                 </View>
      
-                <TouchableOpacity style={styles.signOutButton} onPress={() => navigation.navigate("GenerateCode", 
-                  {eId: Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)})}>
+                <TouchableOpacity style={styles.signOutButton} onPress={() => navigation.navigate("QRCode")}>
                     <Text style={styles.signOutText}>Start Event</Text>
                 </TouchableOpacity>
             </View>
@@ -131,7 +118,7 @@ const styles = StyleSheet.create({
     inputView: {
         backgroundColor: "#FFC0CB",
         borderRadius: 30,
-        width: "85%",
+        width: "70%",
         height: 45,
         marginBottom: 10,
         marginTop: 15,
@@ -143,12 +130,12 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     signOutButton: {
-        width: "85%",
+        width: "80%",
         borderRadius: 25,
         height: 50,
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 20,
+        marginTop: 40,
         backgroundColor: "#FF1493",
       },
     signOutText: {
@@ -162,7 +149,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         position: "absolute", 
-        top: 90,
+        top: 150,
         width: "90%",
         alignItems: 'center',
     },

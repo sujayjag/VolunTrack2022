@@ -13,7 +13,7 @@ import joinedEvents from "../app/screens/joinedEvents.js";
 import currentEvents from "../app/screens/currentEvents.js";
 import Success from "../app/screens/Success.js";
 import Join from "../app/screens/Join.js";
-import GenerateCode from "../app/screens/GenerateCode.js";
+import QRCode from "../app/screens/QRCode.js";
 
 
 const Stack = createStackNavigator();
@@ -23,7 +23,7 @@ const MainStackNavigator = () => {
     <Stack.Navigator 
         screenOptions={{
         headerStyle: {
-          backgroundColor: "#ed80bb",
+          backgroundColor: "#9AC4F8",
         },
         headerTintColor: "white",
         headerBackTitle: "Back",
@@ -40,7 +40,7 @@ const MainStackNavigator = () => {
       <Stack.Screen name="currentEvents" component={currentEvents} options={{ title: 'Current Events' }}/>
       <Stack.Screen name="Success" component={Success} />
       <Stack.Screen name="Join" component={Join} />
-      <Stack.Screen name="GenerateCode" component={GenerateCode} />
+      <Stack.Screen name="QRCode" component={QRCode} />
     </Stack.Navigator>
   );
 }

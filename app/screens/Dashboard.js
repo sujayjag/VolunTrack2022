@@ -7,27 +7,13 @@ const Dashboard = ({ navigation }) => {
         <View style={styles.cont}>
             <StatusBar style="auto"/>
 
+            <View style={styles.logoContainer}>
+                <Text style={styles.titleText}>Welcome</Text>
+            </View>
+
             <TouchableOpacity style={styles.profileIcon2} onPress={() => navigation.navigate("Profile")}>
                 <Image style = {styles.logo} source={require("../assets/user.png")}></Image> 
             </TouchableOpacity>
-
-            <View style={{justifyContent: 'space-between'}}>
-                <Text style={styles.titleText}></Text>
-            </View>
-            <View style={{justifyContent: 'space-between'}}>
-                <Text style={styles.titleText}></Text>
-            </View>
-            <View style={{justifyContent: 'space-between'}}>
-                <Text style={styles.titleText}></Text>
-            </View>
-            <View style={{justifyContent: 'space-between'}}>
-                <Text style={styles.titleText}></Text>
-            </View>
-
-            <View style={styles.logoContainer}>
-                <Image style={styles.logo} source={require("../assets/logo.png")}/>
-                <Text style={styles.titleText}>VolunTrack</Text>
-            </View>
                 
             <TouchableOpacity style={styles.joinButton} onPress={() => navigation.navigate("Join")}>
                 <Text style={styles.joinText}>Join / Leave Event</Text>

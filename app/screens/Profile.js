@@ -8,6 +8,7 @@ const Profile = ({ navigation }) => {
     const [lname, setLname] = useState("");
     const [phone, setPhone] = useState(""); 
     const [email, setEmail] = useState("");
+    const [role, setRole] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -26,7 +27,7 @@ const Profile = ({ navigation }) => {
             <View style={styles.logoContainer}>
                 <Text style={styles.titleText}>Profile</Text>
             </View>
-            {<StatusBar style="auto"/>}
+            <StatusBar style="auto"/>
             <View style={styles.inputContainer}>
                 <View style={styles.inputView}>
                     <TextInput
@@ -69,25 +70,12 @@ const Profile = ({ navigation }) => {
                 <View style={styles.inputView}>
                     <TextInput
                     style={styles.TextInput}
-                    placeholder="Enter New Password"
+                    placeholder="Enter Role (ex: Volunteer)"
                     placeholderTextColor="#003f5c"
                     autoCorrect="False"
-                    onChangeText={(password) => setPassword(password)}
+                    onChangeText={(role) => setRole(role)}
                     />
                 </View>
-                <View style={styles.inputView}>
-                    <TextInput
-                    style={styles.TextInput}
-                    placeholder="Confirm New Password"
-                    placeholderTextColor="#003f5c"
-                    autoCorrect="False"
-                    onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
-                    />
-                </View>
-                
-                <TouchableOpacity style={styles.signOutButton} onPress={() => handleSignOut()}>
-                    <Text style={styles.signOutText}>Save Changes</Text>
-                </TouchableOpacity>
 
                 <TouchableOpacity style={styles.signOutButton} onPress={() => handleSignOut()}>
                     <Text style={styles.signOutText}>Sign out</Text>
@@ -115,7 +103,7 @@ const styles = StyleSheet.create({
     },
     logoContainer: {
         position: "absolute", 
-        top: 30,
+        top: 20,
         bottom: 70,
         alignItems: 'center',
     },
@@ -139,7 +127,7 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 30,
+        marginTop: 40,
         backgroundColor: "#FF1493",
       },
     signOutText: {
@@ -153,7 +141,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         position: "absolute", 
-        top: 100,
+        top: 150,
         width: "90%",
         alignItems: 'center',
     },
