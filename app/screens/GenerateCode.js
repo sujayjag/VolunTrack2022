@@ -8,6 +8,7 @@ const GenerateCode = ({ route, navigation }) => {
     const eventId = JSON.stringify(eId);
 
     // const eventId = navigation.getParam('eId');
+    //comment
 
     return (
         <View style={styles.cont}>
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     saveButton: {
-        width: 150,
+        width: 250,
         borderRadius: 25,
         height: 50,
         alignItems: "center",
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     shareButton: {
-        width: 150,
+        width: 250,
         borderRadius: 25,
         height: 50,
         alignItems: "center",
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     homeButton: {
-        width: 150,
+        width: 250,
         borderRadius: 25,
         height: 50,
         alignItems: "center",
