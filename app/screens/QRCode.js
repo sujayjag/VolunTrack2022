@@ -22,6 +22,8 @@ const QRCode = ({ navigation }) => {
     );
 };
 
+// test
+
 const styles = StyleSheet.create({
     cont: {
         flex: 1,
