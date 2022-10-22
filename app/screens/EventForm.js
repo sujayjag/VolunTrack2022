@@ -36,7 +36,7 @@ const EventForm = ({ navigation }) => {
     const [max, setMax] = useState("");
     const [cEmail, setCEmail] = useState("");
     const [cNumber, setCNumber] = useState("");
-    const [region, setRegion] = React.useState({
+    const [region, setRegion] = useState({
         latitude: 0,
         longitude: 0,
         latitudeDelta: 0.01,
@@ -55,7 +55,8 @@ const EventForm = ({ navigation }) => {
           description: descr,
           startDate: startDate,
           endDate: endDate,
-          //location: loc,
+          latitude: region["latitude"],
+          longitude: region["longitude"],
           maxHours: max,
           organizerId: organizer.uid,
           contactEmail: cEmail,
