@@ -131,8 +131,8 @@ export default class screens extends Component {
             let element = {
               eventId: curEvent,
               coordinate: {                
-                latitude: (Math.random() * 600) - 300,
-                longitude: (Math.random() * 600) - 300
+                latitude: snapshot.val()[Object.keys(this.state.events)[i]]['latitude'],
+                longitude: snapshot.val()[Object.keys(this.state.events)[i]]['longitude']
                 // latitude: 45.624548,
                 //longitude: -122.7749817,
               },
