@@ -4,6 +4,8 @@ import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image,
 import { initializeApp, firebase } from 'firebase/app';
 import { getDatabase, ref, set, push, child, update, remove } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity, Dropdown, ScrollView} from 'react-native';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyCtSa-qK2xb-Wky_vszWWACyTqru9c9l94",
@@ -60,17 +62,40 @@ const EventForm = ({ navigation }) => {
       }
 
       
+    const [region, setRegion] = React.useState({
+        latitude: 51.5079145,
+        longitude: -0.0899163,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
+    
     
     //const eventId = Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)
    
     return (
+    <ScrollView>
         <View style={styles.container}>
-            <View style={styles.logoContainer}>
-                <Text style={styles.titleText}>Event Form</Text>
-            </View>          
-
+            {/* <View style={styles.logoContainer}>
+                <Text style={styles.titleText}>Event Form </Text>
+            </View>  */}
             <StatusBar style="auto"/>
             <View style={styles.inputContainer}>
+                <View>
+                    <MapView
+                        style={styles.map}
+                        provider={PROVIDER_GOOGLE}
+                        showsUserLocation
+                        initialRegion={{
+                        latitude: 33.7490,
+                        longitude: -84.3880,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421}}
+                        onRegionChangeComplete={(region) => setRegion(region)}
+                    />
+                    <Text style={styles.text}>Current latitude: {region.latitude}</Text>
+                    <Text style={styles.text}>Current longitude: {region.longitude}</Text>
+                </View>
+            
                 <View style={styles.inputView}>
                     <TextInput
                     style={styles.TextInput}
@@ -112,15 +137,6 @@ const EventForm = ({ navigation }) => {
                 <View style={styles.inputView}>
                     <TextInput
                     style={styles.TextInput}
-                    placeholder="Location"
-                    placeholderTextColor="#003f5c"
-                    autoCorrect="False"
-                    onChangeText={(loc) => setLoc(loc)}
-                    />
-                </View>
-                <View style={styles.inputView}>
-                    <TextInput
-                    style={styles.TextInput}
                     placeholder="Max Hours"
                     placeholderTextColor="#003f5c"
                     autoCorrect="False"
@@ -151,6 +167,8 @@ const EventForm = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
         </View>
+    </ScrollView>
+        
     );
 };
 
@@ -181,7 +199,7 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         width: "85%",
         height: 45,
-        marginBottom: 10,
+        marginBottom: 0,
         marginTop: 15,
     },
     TextInput: {
@@ -196,8 +214,9 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 20,
+        marginTop: 15,
         backgroundColor: "#FF1493",
+        marginBottom: 50,
       },
     signOutText: {
         alignItems: 'center',
@@ -214,6 +233,12 @@ const styles = StyleSheet.create({
         width: "90%",
         alignItems: 'center',
     },
+    map: {
+        height: 200,
+        width: 350,
+        marginBottom: 0,
+        marginTop: -75,
+    }
 });
 
 export default EventForm;
