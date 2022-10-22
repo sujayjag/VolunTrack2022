@@ -51,9 +51,9 @@ export default function Join() {
         if(snapshot.exists()) {
           // alert('yay')
           // alert(typeof(data))
-          newPath = `Users/${uid}/attendedEvents/${data}`
-          set(ref(db, newPath), snapshot.val())
-            .then(() => {
+          newPath = `Users/${uid}/attendedEvents`
+          push(ref(db, newPath), data)
+            .then((event) => {
               //alert("Lit")
              push(ref(db, path + "/attendedUsers/"), uid)
               .then((event) => alert("Lit"))
