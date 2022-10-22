@@ -89,25 +89,12 @@ const db = getDatabase(firebaseApp);
         const auth = getAuth();
         
         createUserWithEmailAndPassword(auth, email, password)
-          .then((userCredential) => {
-        // Signed in 
-            
-            //const db = firebase.firestore();
-            //const newUser = db.collection("User")
-            // firebase.firestore().collection('User').add({
-            //   email: email,
-            //   fName: fname,
-            //   lName: lname,
-            //   phoneNum: phone
-            // })
+          .then((userCredential) => {  
             const uid = userCredential.user.uid
             insertData(uid);
             const user = userCredential.user;
             navigation.navigate("Dashboard");
-            
-            
-        
-            
+ 
           })
           .catch((error) => {
             const errorCode = error.code;

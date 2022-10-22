@@ -18,7 +18,7 @@ const firebaseApp = initializeApp({
   
   const db = getDatabase(firebaseApp);
 
-const EventForm = ({ navigation }) => {
+const EventForm = ({ navigation }) => {    
     const [name, setName] = useState("");
     const [descr, setDesc] = useState("");
     const [startDate, setStartDate] = useState("");
@@ -29,9 +29,13 @@ const EventForm = ({ navigation }) => {
     const [cNumber, setCNumber] = useState("");
 
     function insertData() {
+        //const eventRef = db.ref('Events')
+        //const event = ref.child("Events")
+
         const auth = getAuth()
+        
         const organizer = auth.currentUser
-        const eventData = push(ref(db, "Events/"), {
+        const payload = {
           name: name,
           description: descr,
           startDate: startDate,
@@ -43,10 +47,23 @@ const EventForm = ({ navigation }) => {
           contactNumber: cNumber,
           eventEnded: 1,
           attendedUsers: [0],
-        })
-        .then(() => {
-          alert("Data Stored Successfully!");
-          navigation.navigate("Dashboard");   
+        }
+        //const eventData = push(ref(db, "Events/"),{
+          const eventId = push(ref(db, "Events/"), payload)
+        .then((event) => {
+          //alert("Data Stored Successfully! Event code is " + event.key);
+          //append event.key to uid.
+          // orgPath = "Users/" + organizer.uid + "createdEvents/" + event.key
+          set(ref(db, "Users/" + organizer.uid + "/createdEvents/" + event.key), payload)
+            .then(() => {
+              navigation.navigate("GenerateCode", 
+                  {eId: event.key}) 
+            })
+            .catch((error) => {
+              alert(error.message)
+            })
+
+           
         })
         .catch((error) => {
           const errorMessage = error.message;
@@ -141,8 +158,7 @@ const EventForm = ({ navigation }) => {
                     />
                 </View>
      
-                <TouchableOpacity style={styles.signOutButton} onPress={() => {insertData(); navigation.navigate("GenerateCode", 
-                  {eId: Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)})}}>
+                <TouchableOpacity style={styles.signOutButton} onPress={() => {insertData();}}>
                     <Text style={styles.signOutText}>Start Event</Text>
                 </TouchableOpacity>
             </View>
