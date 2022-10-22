@@ -5,7 +5,8 @@ import QRCode from 'react-native-qrcode-svg';
 
 const GenerateCode = ({ route, navigation }) => {
     const { eId } = route.params;
-    const eventId = JSON.stringify(eId);
+    const eventId = JSON.stringify(eId).slice(1,-1);
+    console.log(eventId)
 
     // const eventId = navigation.getParam('eId');
     //comment
@@ -28,9 +29,9 @@ const GenerateCode = ({ route, navigation }) => {
 
             <QRCode
               value={eventId}
-              logo={require("../assets/logo.png")}
-              logoBackgroundColor='white'
-              logoSize={80}
+              // logo={require("../assets/logo.png")}
+              // logoBackgroundColor='white'
+              // logoSize={80}
               size={300}
               color={'#CF9FFF'}
               
