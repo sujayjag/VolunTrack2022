@@ -98,18 +98,18 @@ export default class screens extends Component {
     // this.getData
     // console.log(this.state)
 
-    for (var i=0; i<nameArr.length; i++) {
-      let element = {
-        coordinate: {
-          latitude: 45.624548,
-          longitude: -122.7749817,
-        },
-        title: nameArr[i],
-        description: descArr[i],
-        image: Pic,
-      }
-      this.state.markers.push(element)
-    }
+    // for (var i=0; i<nameArr.length; i++) {
+    //   let element = {
+    //     coordinate: {
+    //       latitude: 45.624548,
+    //       longitude: -122.7749817,
+    //     },
+    //     title: nameArr[i],
+    //     description: descArr[i],
+    //     image: Pic,
+    //   }
+    //   this.state.markers.push(element)
+    // }
   }
   componentDidMount() {
     get(child(dbref, 'Events/'))
@@ -122,8 +122,33 @@ export default class screens extends Component {
           this.setState({
             eventKeys: Object.keys(this.state.events)
           })
-          console.log(this.state.events)
+          let locArr = []
+
+          for(let i = 0; i < Object.keys(this.state.events).length; i++) {
+            let curEvent = Object.keys(this.state.events)[i]
+            //console.log(curEvent)
+            //grab info from event directly
+            let element = {
+              eventId: curEvent,
+              coordinate: {                
+                latitude: (Math.random() * 600) - 300,
+                longitude: (Math.random() * 600) - 300
+                // latitude: 45.624548,
+                //longitude: -122.7749817,
+              },
+              title: snapshot.val()[Object.keys(this.state.events)[i]]['name'],
+              description: snapshot.val()[Object.keys(this.state.events)[i]]['description'],
+              image: Pic
+            }
+            
+            locArr.push(element)
+          }
+          this.setState({
+            markers: locArr
+          })
+          //console.log(this.state.events)
           console.log(this.state.eventKeys)
+          console.log(this.state.markers)
         } else {
           console.log("snapshot doesn't exist.")
         }
