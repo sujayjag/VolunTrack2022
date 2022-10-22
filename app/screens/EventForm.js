@@ -111,7 +111,7 @@ const EventForm = ({ navigation }) => {
         alert("Please enter a valid numbers of max hours")
       } else {
         insertData();
-        navigation.navigate("GenerateCode", {eId: Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)})
+        //navigation.navigate("GenerateCode", {eId: Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)})
       }  
     
     //const eventId = Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)
