@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button, Alert } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, addDoc, collection, getFirestore } from "firebase/firestore";
+import { initializeApp, firebase } from 'firebase/app';
+import { getDatabase, ref, set, child, update, remove, get } from "firebase/database";
 //import { createStackNavigator, createAppContainer } from 'react-navigation';  
 
 export default function Join() {
@@ -26,8 +30,36 @@ export default function Join() {
   // What happens when we scan the bar code
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    setText(data)
-    console.log('Type: ' + type + '\nData: ' + data)
+
+    //if the code is a valid created event, add it to attended events
+    const firebaseApp = initializeApp({
+      apiKey: "AIzaSyCtSa-qK2xb-Wky_vszWWACyTqru9c9l94",
+      authDomain: "voluntrack-ba589.firebaseapp.com",
+      projectId: "voluntrack-ba589",
+      storageBucket: "voluntrack-ba589.appspot.com",
+      messagingSenderId: "237292785966",
+      appId: "1:237292785966:web:8813a69013f743a1afaabf",
+      measurementId: "G-KN9SKC5DYZ",
+      databaseURL: "https://voluntrack-ba589-default-rtdb.firebaseio.com/"
+    });
+
+    const db = getDatabase(firebaseApp);
+    const uid = getAuth().currentUser.uid
+    const path = `Events/${data}`
+    get(child(ref(db), path))
+      .then((snapshot) => {
+        if(snapshot.exists()) {
+          // alert('yay')
+          // alert(typeof(data))
+          newPath = `Users/${uid}/attendedEvents/${data}`
+          set(ref(db, newPath), snapshot.val())
+            .then(() => {alert("Lit")})
+            .catch((error) => {alert(error.message)})
+        } else {
+          alert("hello")
+        }
+      })
+      .catch((error) => {alert(error.message)})
   };
 
   // Check permissions and return the screens
@@ -74,7 +106,7 @@ export default function Join() {
           style={{ height: 400, width: 400 }} />
       </View>
       <Text style={styles.maintext}>{text}</Text>
-      {scanned && <Button title={buttonText} color={buttonColor} onPress={() => setValues(false)}/>}
+      {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
       
 
     </View>
