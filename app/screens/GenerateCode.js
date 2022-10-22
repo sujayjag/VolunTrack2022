@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
-import QRCode from 'react-qr-code';
+import QRCode from 'react-native-qrcode-svg';
 
 const GenerateCode = ({ route, navigation }) => {
     const { eId } = route.params;
@@ -27,8 +27,17 @@ const GenerateCode = ({ route, navigation }) => {
             <Text>Code: {eventId}</Text>
 
             <QRCode
-      value={eventId}
-    />
+              value={eventId}
+              logo={require("../assets/logo.png")}
+              logoBackgroundColor='white'
+              logoSize={80}
+              size={300}
+              color={'#CF9FFF'}
+              
+              // enableLinearGradient={true}
+              // linearGradient={['#f7ff00','#db36a4']}
+              // gradientDirection={[0,45,44,0]}
+            />
 
             <View style={styles.container}>
                 <TouchableOpacity style={styles.saveButton} onPress={() => navigation.navigate("Dashboard")}>
