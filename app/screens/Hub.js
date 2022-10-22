@@ -77,8 +77,12 @@ const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
+
+
 export default class screens extends Component {
   state = {
+    events: {},
+    eventKeys: [],
     markers: [],
     region: {
       latitude: 45.52220671242907,
@@ -87,11 +91,32 @@ export default class screens extends Component {
       longitudeDelta: 0.040142817690068,
     },
   };
+  
+  getData = () => {
+    get(child(dbref, 'Events/'))
+      .then((snapshot) => {
+        if(snapshot.exists) {
+          console.log("hello")
+          //console.log(snapshot.val())
+          //this.state.events = snapshot.val()
+          this.setState({
+            events: snapshot.val()
+          })
+          //console.log(snapshot.val())
+        } else {
+          console.log("snapshot doesn't exist.")
+        }
+      })
+      .catch((error) => alert(error.message))
+  }
+
+  
 
   componentWillMount() {
     this.index = 0;
     this.animation = new Animated.Value(0);
-    console.log(nameArr)
+    // this.getData
+    // console.log(this.state)
 
     for (var i=0; i<nameArr.length; i++) {
       let element = {
@@ -107,6 +132,23 @@ export default class screens extends Component {
     }
   }
   componentDidMount() {
+    get(child(dbref, 'Events/'))
+      .then((snapshot) => {
+        if(snapshot.exists) {
+          this.setState({
+            events: snapshot.val()
+          })
+          
+          this.setState({
+            eventKeys: Object.keys(this.state.events)
+          })
+          console.log(this.state.events)
+          console.log(this.state.eventKeys)
+        } else {
+          console.log("snapshot doesn't exist.")
+        }
+      })
+      .catch((error) => alert(error.message))
     // We should detect when scrolling has stopped then animate
     // We should just debounce the event listener here
     this.animation.addListener(({ value }) => {
@@ -140,6 +182,7 @@ export default class screens extends Component {
   }
 
   render() {
+    this.getData
     const interpolations = this.state.markers.map((marker, index) => {
       const inputRange = [
         (index - 1) * CARD_WIDTH,
