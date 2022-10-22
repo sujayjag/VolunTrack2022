@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, addDoc, collection, getFirestore } from "firebase/firestore";
 import { initializeApp, firebase } from 'firebase/app';
-import { getDatabase, ref, set, child, update, remove } from "firebase/database";
+import { getDatabase, ref, set, get, child, update, remove } from "firebase/database";
 import { listenerCount } from "process";
 
 //import firebaseConfig from '../../db/firebaseConfig.js';
@@ -42,11 +42,11 @@ const db = getDatabase(firebaseApp);
     
     function insertData(uid) {
       set(ref(db, "Users/" + uid),{
-        email: email,
+        emailAddress: email,
         firstName: fname,
         lastName: lname,
-        phone: phone,
-        currentEventID: 0,
+        phoneNumber: phone,
+        currentEventId: 0,
         currrentEventStartTime: 0,
         currentEventEndTime: 0,
         createdEvents: [0],
