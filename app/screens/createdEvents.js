@@ -51,6 +51,30 @@ const createdEvents = ({ navigation }) => {
                 else {
                     setFlag("You have created some events");
                 }
+
+                let createdArr = []
+                // console log for created event keys
+                console.log(Object.values(snapshot.val().createdEvents))
+                // loop traversing through all created event keys
+                for(let i = 1; i < Object.values(snapshot.val().createdEvents).length; i++) {
+                    //const dbref = ref(db);
+                    let eid = Object.values(snapshot.val().createdEvents)[i]
+                    
+                    get(child(dbref, `Events/${eid}`))
+                    .then((snapshot) => {
+                        if(snapshot.exists) {
+  
+                            let info = snapshot.val()
+                            createdArr.push(info)
+                            setEventsArr(createdArr)
+                            setEventStr(JSON.stringify(createdArr))
+                            console.log(createdArr)
+                        } else {
+                            console.log("snapshot doesnt exist")
+                        }
+                    })
+                    .catch((error) => console.log(error.message))
+                }
             }
               let createdArr = []
               let attendeesDict = {}
