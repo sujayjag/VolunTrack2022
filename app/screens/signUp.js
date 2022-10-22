@@ -81,7 +81,7 @@ const db = getDatabase(firebaseApp);
         setPhone(p);
 
         const auth = getAuth();
-        const uid = auth.CurrentUser.UserId
+        
         createUserWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
         // Signed in 
@@ -94,6 +94,7 @@ const db = getDatabase(firebaseApp);
             //   lName: lname,
             //   phoneNum: phone
             // })
+            const uid = userCredential.user.uid
             insertData(uid);
             const user = userCredential.user;
             navigation.navigate("Dashboard");
