@@ -37,39 +37,39 @@ const dbref = ref(db);
 // const user = auth.currentUser;
 // const uid = user.uid;
 
-function getUsersEvents() {
-  const dbref = ref(db);
-  const auth = getAuth();
-  const user = auth.currentUser;
-  if (user!=null) {
-    const uid = user.uid;
-    get(child(dbref, "Users/" + uid))
-      .then((snapshot) => {
-        let data = snapshot.val().createdEvents;
-        var objectData = Object.values(data);
-        objectData.shift();
-        let str = ""
-        for (var i = 0; i < objectData.length; i++) {
-          str = str + SelectData(objectData[i]);
-        }
-        console.log(str)
-      })
-      .catch((error) => alert(error.message))
-  }
-}
+// function getUsersEvents() {
+//   const dbref = ref(db);
+//   const auth = getAuth();
+//   const user = auth.currentUser;
+//   if (user!=null) {
+//     const uid = user.uid;
+//     get(child(dbref, "Users/" + uid))
+//       .then((snapshot) => {
+//         let data = snapshot.val().createdEvents;
+//         var objectData = Object.values(data);
+//         objectData.shift();
+//         let str = ""
+//         for (var i = 0; i < objectData.length; i++) {
+//           str = str + SelectData(objectData[i]);
+//         }
+//         console.log(str)
+//       })
+//       .catch((error) => alert(error.message))
+//   }
+// }
 
-function SelectData(eventId) {
-  get(child(dbref, "Events/" + eventId))
-    .then((snapshot) => {
-      nameArr.push(snapshot.val().name)
-      descArr.push(snapshot.val().description)
-    })
-    .catch((error) => alert(error.message))
-}
+// function SelectData(eventId) {
+//   get(child(dbref, "Events/" + eventId))
+//     .then((snapshot) => {
+//       nameArr.push(snapshot.val().name)
+//       descArr.push(snapshot.val().description)
+//     })
+//     .catch((error) => alert(error.message))
+// }
 
-let nameArr = []
-let descArr = []
-getUsersEvents()
+// let nameArr = []
+// let descArr = []
+// getUsersEvents()
 
 
 const { width, height } = Dimensions.get("window");
@@ -92,26 +92,6 @@ export default class screens extends Component {
     },
   };
   
-  getData = () => {
-    get(child(dbref, 'Events/'))
-      .then((snapshot) => {
-        if(snapshot.exists) {
-          console.log("hello")
-          //console.log(snapshot.val())
-          //this.state.events = snapshot.val()
-          this.setState({
-            events: snapshot.val()
-          })
-          //console.log(snapshot.val())
-        } else {
-          console.log("snapshot doesn't exist.")
-        }
-      })
-      .catch((error) => alert(error.message))
-  }
-
-  
-
   componentWillMount() {
     this.index = 0;
     this.animation = new Animated.Value(0);
