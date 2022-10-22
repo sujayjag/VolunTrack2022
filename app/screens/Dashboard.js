@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 
 const Dashboard = ({ navigation }) => {
     return (
@@ -30,13 +29,6 @@ const Dashboard = ({ navigation }) => {
                 <Text style={styles.titleText}>VolunTrack</Text>
             </View>
                 
-            <TouchableOpacity style={styles.hubButton} onPress={() => navigation.navigate("Hub")}>
-                    <LinearGradient
-                        start={{x: 0, y: 0}} end={{x: 1, y: 0}}
-                        colors={['#FBD786', '#f7797d']} style={styles.hubButton}>
-                        <Text style={styles.hubText}>Hub</Text>
-                    </LinearGradient>
-            </TouchableOpacity>
             <TouchableOpacity style={styles.joinButton} onPress={() => navigation.navigate("Join")}>
                 <Text style={styles.joinText}>Join / Leave Event</Text>
             </TouchableOpacity>
@@ -101,7 +93,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: "#FF1493",
         marginBottom: 30,
-        marginTop: 60,
+        marginTop: 200,
     },
     joinText: {
         alignItems: 'center',
@@ -189,24 +181,6 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 70,
         backgroundColor: "#4ecdc4",
-    },
-    hubButton: {
-        width: 150,
-        borderRadius: 25,
-        height: 50,
-        alignItems: "center",
-        justifyContent: "center",
-        marginTop: 150,
-        marginBottom: 30,
-      },
-    hubText: {
-        alignItems: 'center',
-        justifyContent: "center",
-        fontSize: 16,
-        lineHeight: 21,
-        fontWeight: 'bold',
-        letterSpacing: 0.25,
-        color: '#f7f5ed',
     },
 });
 
