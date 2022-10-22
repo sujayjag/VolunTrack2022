@@ -1,5 +1,3 @@
-// sup
-
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useRef } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity, Dropdown, ScrollView} from 'react-native';
@@ -173,9 +171,9 @@ const EventForm = ({ navigation }) => {
                         onChangeText={(cNumber) => setCNumber(cNumber)}
                         />
                     </View>
-         
-                    <TouchableOpacity style={styles.signOutButton} onPress={() => navigation.navigate("GenerateCode", 
-                      {eId: Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)})}>
+                    
+                    <TouchableOpacity style={styles.signOutButton} onPress={() => {insertData(); navigation.navigate("GenerateCode", 
+                      {eId: Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)})}}>
                         <Text style={styles.signOutText}>Start Event</Text>
                     </TouchableOpacity>
                 </View>
