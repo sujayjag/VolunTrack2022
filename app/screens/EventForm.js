@@ -64,12 +64,12 @@ const EventForm = ({ navigation }) => {
           attendedUsers: [0],
         }
         //const eventData = push(ref(db, "Events/"),{
-          const eventId = push(ref(db, "Events/"), payload)
+        const eventId = push(ref(db, "Events/"), payload)
         .then((event) => {
           //alert("Data Stored Successfully! Event code is " + event.key);
           //append event.key to uid.
           // orgPath = "Users/" + organizer.uid + "createdEvents/" + event.key
-          set(ref(db, "Users/" + organizer.uid + "/createdEvents/" + event.key), payload)
+          push(ref(db, "Users/" + organizer.uid + "/createdEvents"), event.key)
             .then(() => {
               navigation.navigate("GenerateCode", 
                   {eId: event.key}) 
