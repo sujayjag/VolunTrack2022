@@ -45,7 +45,7 @@ const EventForm = ({ navigation }) => {
           organizerId: organizer.uid,
           contactEmail: cEmail,
           contactNumber: cNumber,
-          eventEnded: 1,
+          eventEnded: 0,
           attendedUsers: [0],
         }
         //const eventData = push(ref(db, "Events/"),{
