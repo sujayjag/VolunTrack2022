@@ -2,17 +2,55 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState, useRef } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity, Dropdown, Compact, Picker} from 'react-native';
 import { getAuth, signOut } from "firebase/auth";
+import { initializeApp, firebase } from 'firebase/app';
+import { getDatabase, ref, set, get, push, child, update, remove } from "firebase/database";
+
+const firebaseApp = initializeApp({
+    apiKey: "AIzaSyCtSa-qK2xb-Wky_vszWWACyTqru9c9l94",
+    authDomain: "voluntrack-ba589.firebaseapp.com",
+    projectId: "voluntrack-ba589",
+    storageBucket: "voluntrack-ba589.appspot.com",
+    messagingSenderId: "237292785966",
+    appId: "1:237292785966:web:8813a69013f743a1afaabf",
+    measurementId: "G-KN9SKC5DYZ",
+    databaseURL: "https://voluntrack-ba589-default-rtdb.firebaseio.com/"
+  });
+  
+const db = getDatabase(firebaseApp);
 
 const Profile = ({ navigation }) => {
-    const [fname, setFname] = useState("");
-    const [lname, setLname] = useState("");
-    const [phone, setPhone] = useState(""); 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+
+    let [fName, setFName] = useState("first name")
+    let [lName, setLName] = useState("last name")
+    let [email, setEmail] = useState("email")
+    let [phoneNum, setPhoneNum] = useState("phone")
+  
+    function SelectData(uid) {
+        const dbref = ref(db);
+        get(child(dbref, "Users/" + uid)).then((snapshot)=> {
+            if (snapshot.exists()) {
+                setFName(snapshot.val().firstName)
+                setLName(snapshot.val().lastName)
+                setEmail(snapshot.val().emailAddress)
+                setPhoneNum(snapshot.val().phoneNumber)
+            }
+            else {
+                alert("No data found")
+                
+            }
+         })
+         .catch((error)=> {
+            alert("unsuccessful, error"+error);
+         });
+        }
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const uid = user.uid;
+
+    SelectData(uid);
 
     const handleSignOut = () => {
-      const auth = getAuth();
       signOut(auth).then(() => {
         navigation.navigate("Home");
       }).catch((error) => {
@@ -22,72 +60,55 @@ const Profile = ({ navigation }) => {
     }
 
     return (
+        
         <View style={styles.container}>
+            
             <View style={styles.logoContainer}>
-                <Text style={styles.titleText}>Profile</Text>
+                <Text style={styles.title}>Profile</Text>
             </View>
             {<StatusBar style="auto"/>}
-            <View style={styles.inputContainer}>
-                <View style={styles.inputView}>
-                    <TextInput
-                    style={styles.TextInput}
-                    placeholder="Enter First Name"
-                    placeholderTextColor="#003f5c"
-                    autoCorrect="False"
-                    autoCapitalize="words"
-                    onChangeText={(fname) => setFname(fname)}
-                    />
+            <View style={{justifyContent: 'center'}}>
+                <Text style={styles.titleText}>First Name</Text>
+                <Text style={styles.baseText}>{fName}</Text>
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
                 </View>
-                <View style={styles.inputView}>
-                    <TextInput
-                    style={styles.TextInput}
-                    placeholder="Enter Last Name"
-                    placeholderTextColor="#003f5c"
-                    autoCorrect="False"
-                    autoCapitalize="words"
-                    onChangeText={(lname) => setLname(lname)}
-                    />
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
                 </View>
-                <View style={styles.inputView}>
-                    <TextInput
-                    style={styles.TextInput}
-                    placeholder="Enter Phone Number"
-                    placeholderTextColor="#003f5c"
-                    autoCorrect="False"
-                    onChangeText={(phone) => setPhone(phone)}
-                    />
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
                 </View>
-                <View style={styles.inputView}>
-                    <TextInput
-                    style={styles.TextInput}
-                    placeholder="Enter Email"
-                    placeholderTextColor="#003f5c"
-                    autoCorrect="False"
-                    onChangeText={(email) => setEmail(email)}
-                    />
+                <Text style={styles.titleText}>Last Name</Text>
+                <Text style={styles.baseText}>{lName}</Text>
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
                 </View>
-                <View style={styles.inputView}>
-                    <TextInput
-                    style={styles.TextInput}
-                    placeholder="Enter New Password"
-                    placeholderTextColor="#003f5c"
-                    autoCorrect="False"
-                    onChangeText={(password) => setPassword(password)}
-                    />
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
                 </View>
-                <View style={styles.inputView}>
-                    <TextInput
-                    style={styles.TextInput}
-                    placeholder="Confirm New Password"
-                    placeholderTextColor="#003f5c"
-                    autoCorrect="False"
-                    onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
-                    />
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
                 </View>
-                
-                <TouchableOpacity style={styles.signOutButton} onPress={() => handleSignOut()}>
-                    <Text style={styles.signOutText}>Save Changes</Text>
-                </TouchableOpacity>
+                <Text style={styles.titleText}>Email Address</Text>
+                <Text style={styles.baseText}>{email}</Text>
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
+                </View>
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
+                </View>
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
+                </View>
+                <Text style={styles.titleText}>Phone Number</Text>
+                <Text style={styles.baseText}>{phoneNum}</Text>
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
+                </View>
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
+                </View>
 
                 <TouchableOpacity style={styles.signOutButton} onPress={() => handleSignOut()}>
                     <Text style={styles.signOutText}>Sign out</Text>
@@ -105,7 +126,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
-    titleText: {
+    title: {
         fontSize: 45,
         fontWeight: "bold",
     },
@@ -116,13 +137,14 @@ const styles = StyleSheet.create({
     logoContainer: {
         position: "absolute", 
         top: 30,
-        bottom: 70,
+        bottom: 30,
+        marginBottom: 10,
         alignItems: 'center',
     },
     inputView: {
         backgroundColor: "#FFC0CB",
         borderRadius: 30,
-        width: "70%",
+        width: "50%",
         height: 45,
         marginBottom: 10,
         marginTop: 15,
@@ -134,7 +156,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     signOutButton: {
-        width: "80%",
+        width: 200,
         borderRadius: 25,
         height: 50,
         alignItems: "center",
@@ -157,6 +179,15 @@ const styles = StyleSheet.create({
         width: "90%",
         alignItems: 'center',
     },
+    baseText: {
+        alignItems: 'center',
+        fontSize: 17, 
+    },
+    titleText: {
+        alignItems: 'center',
+        fontSize: 23, 
+        fontWeight: "bold"
+    }
 });
 
 export default Profile;

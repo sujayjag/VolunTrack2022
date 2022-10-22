@@ -3,6 +3,7 @@ import React, { useState, useRef } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity, Dropdown} from 'react-native';
 import { initializeApp, firebase } from 'firebase/app';
 import { getDatabase, ref, set, push, child, update, remove } from "firebase/database";
+import { getAuth } from "firebase/auth";
 
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyCtSa-qK2xb-Wky_vszWWACyTqru9c9l94",
@@ -28,13 +29,16 @@ const EventForm = ({ navigation }) => {
     const [cNumber, setCNumber] = useState("");
 
     function insertData() {
-        const eventData = push(ref(db, "Events/"),{
+        const auth = getAuth()
+        const organizer = auth.currentUser
+        const eventData = push(ref(db, "Events/"), {
           name: name,
           description: descr,
           startDate: startDate,
           endDate: endDate,
           location: loc,
           maxHours: max,
+          organizerId: organizer.uid,
           contactEmail: cEmail,
           contactNumber: cNumber,
           eventEnded: 1,
