@@ -38,7 +38,7 @@ const EventForm = ({ navigation }) => {
           contactEmail: cEmail,
           contactNumber: cNumber,
           eventEnded: 1,
-          attendedUsers: [0]
+          attendedUsers: [0],
         })
         .then(() => {
           alert("Data Stored Successfully!");
