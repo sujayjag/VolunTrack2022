@@ -16,6 +16,7 @@ import currentEvents from "../app/screens/currentEvents.js";
 import Success from "../app/screens/Success.js";
 import Join from "../app/screens/Join.js";
 import GenerateCode from "../app/screens/GenerateCode.js";
+import Hub from "../app/screens/Hub.js";
 
 
 const Stack = createStackNavigator();
@@ -43,6 +44,7 @@ const MainStackNavigator = () => {
       <Stack.Screen name="Success" component={Success} />
       <Stack.Screen name="Join" component={Join} />
       <Stack.Screen name="GenerateCode" component={GenerateCode} />
+      <Stack.Screen name="Hub" component={Hub} />
     </Stack.Navigator>
   );
 }
