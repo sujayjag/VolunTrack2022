@@ -29,9 +29,9 @@ const GenerateCode = ({ route, navigation }) => {
 
             <QRCode
               value={eventId}
-              // logo={require("../assets/logo.png")}
-              // logoBackgroundColor='white'
-              // logoSize={80}
+              logo={require("../assets/logo.png")}
+              logoBackgroundColor='white'
+              logoSize={80}
               size={300}
               color={'#CF9FFF'}
               
