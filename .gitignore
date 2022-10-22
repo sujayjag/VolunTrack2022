@@ -68,9 +68,8 @@ local.properties
 
 # Node
 node_modules
-*.log
-.nvm
-package-lock.json
+npm-debug.log
+yarn-error.log
 
 # OS X
 .DS_Store
@@ -134,3 +133,4 @@ package-lock.json
 .metro-health-check*
 
 /.expo
+.DS_Store

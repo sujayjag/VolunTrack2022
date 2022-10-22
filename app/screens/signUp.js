@@ -6,6 +6,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, addDoc, collection, getFirestore } from "firebase/firestore";
 import { initializeApp, firebase } from 'firebase/app';
 import { getDatabase, ref, set, child, update, remove } from "firebase/database";
+import { listenerCount } from "process";
 
 //import firebaseConfig from '../../db/firebaseConfig.js';
 
@@ -41,10 +42,15 @@ const db = getDatabase(firebaseApp);
     
     function insertData(uid) {
       set(ref(db, "Users/" + uid),{
-        Email: email,
-        Fname: fname,
-        Lname: lname,
-        Phone: phone,
+        email: email,
+        firstName: fname,
+        lastName: lname,
+        phone: phone,
+        currentEventID: 0,
+        currrentEventStartTime: 0,
+        currentEventEndTime: 0,
+        createdEvents: [0],
+        attendedEvents:  [0],
       })
       .then(() => {
         alert("Data Stored Successfully!");
@@ -83,25 +89,12 @@ const db = getDatabase(firebaseApp);
         const auth = getAuth();
         
         createUserWithEmailAndPassword(auth, email, password)
-          .then((userCredential) => {
-        // Signed in 
-            
-            //const db = firebase.firestore();
-            //const newUser = db.collection("User")
-            // firebase.firestore().collection('User').add({
-            //   email: email,
-            //   fName: fname,
-            //   lName: lname,
-            //   phoneNum: phone
-            // })
+          .then((userCredential) => {  
             const uid = userCredential.user.uid
             insertData(uid);
             const user = userCredential.user;
             navigation.navigate("Dashboard");
-            
-            
-        
-            
+ 
           })
           .catch((error) => {
             const errorCode = error.code;
