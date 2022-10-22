@@ -5,7 +5,8 @@ import QRCode from 'react-native-qrcode-svg';
 
 const GenerateCode = ({ route, navigation }) => {
     const { eId } = route.params;
-    const eventId = JSON.stringify(eId);
+    const eventId = JSON.stringify(eId).slice(1,-1);
+    console.log(eventId)
 
     // const eventId = navigation.getParam('eId');
     //comment

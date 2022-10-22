@@ -20,10 +20,10 @@ const db = getDatabase(firebaseApp);
 
 const Profile = ({ navigation }) => {
 
-    let [fName, setFName] = useState("first name")
-    let [lName, setLName] = useState("last name")
-    let [email, setEmail] = useState("email")
-    let [phoneNum, setPhoneNum] = useState("phone")
+    let [fName, setFName] = useState("")
+    let [lName, setLName] = useState("")
+    let [email, setEmail] = useState("")
+    let [phoneNum, setPhoneNum] = useState("")
   
     function SelectData(uid) {
         const dbref = ref(db);
@@ -42,7 +42,7 @@ const Profile = ({ navigation }) => {
          .catch((error)=> {
             alert("unsuccessful, error"+error);
          });
-        }
+    }
 
     const auth = getAuth();
     const user = auth.currentUser;
