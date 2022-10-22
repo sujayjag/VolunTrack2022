@@ -42,7 +42,7 @@ const Profile = ({ navigation }) => {
          .catch((error)=> {
             alert("unsuccessful, error"+error);
          });
-        }
+    }
 
     const auth = getAuth();
     const user = auth.currentUser;
