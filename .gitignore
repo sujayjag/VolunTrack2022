@@ -133,3 +133,4 @@ yarn-error.log
 .metro-health-check*
 
 /.expo
+.DS_Store
