@@ -1,6 +1,21 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useRef } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity, Dropdown} from 'react-native';
+import { initializeApp, firebase } from 'firebase/app';
+import { getDatabase, ref, set, push, child, update, remove } from "firebase/database";
+
+const firebaseApp = initializeApp({
+    apiKey: "AIzaSyCtSa-qK2xb-Wky_vszWWACyTqru9c9l94",
+    authDomain: "voluntrack-ba589.firebaseapp.com",
+    projectId: "voluntrack-ba589",
+    storageBucket: "voluntrack-ba589.appspot.com",
+    messagingSenderId: "237292785966",
+    appId: "1:237292785966:web:8813a69013f743a1afaabf",
+    measurementId: "G-KN9SKC5DYZ",
+    databaseURL: "https://voluntrack-ba589-default-rtdb.firebaseio.com/"
+  });
+  
+  const db = getDatabase(firebaseApp);
 
 const EventForm = ({ navigation }) => {
     const [name, setName] = useState("");
@@ -11,6 +26,31 @@ const EventForm = ({ navigation }) => {
     const [max, setMax] = useState("");
     const [cEmail, setCEmail] = useState("");
     const [cNumber, setCNumber] = useState("");
+
+    function insertData() {
+        const eventData = push(ref(db, "Events/"),{
+          name: name,
+          description: descr,
+          startDate: startDate,
+          endDate: endDate,
+          location: loc,
+          maxHours: max,
+          contactEmail: cEmail,
+          contactNumber: cNumber,
+          eventEnded: 1,
+          attendedUsers: [0]
+        })
+        .then(() => {
+          alert("Data Stored Successfully!");
+          navigation.navigate("Dashboard");   
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          alert(errorMessage);
+        });
+      }
+
+      
     
     //const eventId = Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)
    
@@ -97,8 +137,8 @@ const EventForm = ({ navigation }) => {
                     />
                 </View>
      
-                <TouchableOpacity style={styles.signOutButton} onPress={() => navigation.navigate("GenerateCode", 
-                  {eId: Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)})}>
+                <TouchableOpacity style={styles.signOutButton} onPress={() => {insertData(); navigation.navigate("GenerateCode", 
+                  {eId: Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)})}}>
                     <Text style={styles.signOutText}>Start Event</Text>
                 </TouchableOpacity>
             </View>
