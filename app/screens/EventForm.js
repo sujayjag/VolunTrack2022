@@ -19,12 +19,20 @@ const firebaseApp = initializeApp({
   
   const db = getDatabase(firebaseApp);
 
+  const validateNumber = num => {
+    num = num.replace(/\D/g,'');
+    if (num.length === 10) {
+      return true;
+    }
+    return false;
+  }
+
 const EventForm = ({ navigation }) => {    
     const [name, setName] = useState("");
     const [descr, setDesc] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState(""); 
-    const [loc, setLoc] = useState(""); 
+    //const [loc, setLoc] = useState(""); 
     const [max, setMax] = useState("");
     const [cEmail, setCEmail] = useState("");
     const [cNumber, setCNumber] = useState("");
@@ -47,7 +55,7 @@ const EventForm = ({ navigation }) => {
           description: descr,
           startDate: startDate,
           endDate: endDate,
-          location: loc,
+          //location: loc,
           maxHours: max,
           organizerId: organizer.uid,
           contactEmail: cEmail,
@@ -78,10 +86,36 @@ const EventForm = ({ navigation }) => {
         });
       }
 
-      
+    const validateEvent = (n, d, sd, ed, mh, ce, cn, r) => {
+      let phoneRe = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/
+      let emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      let dateRe =  /^[0-1][0-9]\/[0-3][0-9]\/[0-2][0-9][0-9][0-9]\ [0-2][0-9]\:[0-6][0-9]$/
+      //fname, lname, phone, email, password, confirm password, in order.
+      if(!(n && d && sd && ed && mh && ce && cn && r)) {
+        alert(`Please fill out all fields`);
+        return;
+      }
+      else if(!validateNumber(cn)){
+        alert('Please enter a valid contact number')
+      }
+      else if(!emailRe.test(String(ce).toLowerCase())){
+        alert('Please enter a valid contact email')
+      }
+      else if(!dateRe.test(String(sd).toLowerCase())) {
+        alert("Please enter a valid start date and time")
+      }
+      else if(!dateRe.test(String(ed).toLowerCase())) {
+        alert("Please enter a valid end date and time")
+      } 
+      else if (!Number.isInteger(parseInt(mh))) {
+        alert("Please enter a valid numbers of max hours")
+      } else {
+        insertData();
+        navigation.navigate("GenerateCode", {eId: Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)})
+      }  
     
     //const eventId = Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)
-   
+    }
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -172,18 +206,16 @@ const EventForm = ({ navigation }) => {
                         />
                     </View>
                     
-                    <TouchableOpacity style={styles.signOutButton} onPress={() => {insertData(); navigation.navigate("GenerateCode", 
-                      {eId: Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)})}}>
+                    <TouchableOpacity style={styles.signOutButton} onPress={() => {validateEvent(name, descr, startDate, endDate, max, cEmail, cNumber, region)} }>
                         <Text style={styles.signOutText}>Start Event</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-        </ScrollView>
-            
+        </ScrollView>         
         );
     };
     
-    
+
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -251,5 +283,4 @@ const EventForm = ({ navigation }) => {
             marginTop: -75,
         }
     });
-    
-    export default EventForm;
+export default EventForm;
