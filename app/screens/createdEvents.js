@@ -225,8 +225,6 @@ const createdEvents = ({ navigation }) => {
             <Text style={{ fontSize: 24, color: 'red' }}>Created: {created.join()}</Text>
 
             <Text style={{ fontSize: 24, color: 'red' }}>Event info??: {eventStr}</Text>
-
-            <Button onPress={() => console.log(eventsArr)}>Click me</Button>
             
         </View>
     );
