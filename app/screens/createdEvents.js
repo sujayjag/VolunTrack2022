@@ -53,134 +53,174 @@ const createdEvents = ({ navigation }) => {
     const user = auth.currentUser;
     const uid = user.uid;
 
-    function SelectData(uid) {
-        get(child(dbref, "Users/" + uid)).then((snapshot)=> {
 
-            if (snapshot.exists()) {
-                //console.log(snapshot.val())
-                //setEvents(snapshot.val())
-                //console.log(snapshot.val())
+
+    // function SelectData(uid) {
+    //     get(child(dbref, "Users/" + uid)).then((snapshot)=> {
+
+    //         if (snapshot.exists()) {
+    //             //console.log(snapshot.val())
+    //             //setEvents(snapshot.val())
+    //             //console.log(snapshot.val())
                 
-                //setEventStr(JSON.stringify(snapshot.val()))
-                setCreated(Object.values(snapshot.val().createdEvents))
-                //console.log(events)
-                //Array.isArray(dict)
-                // let num = (Object.keys(dict).length)
+    //             //setEventStr(JSON.stringify(snapshot.val()))
+    //             setCreated(Object.values(snapshot.val().createdEvents))
+    //             //console.log(events)
+    //             //Array.isArray(dict)
+    //             // let num = (Object.keys(dict).length)
 
 
-                //uncomment later!!!!!
-                // if (Array.isArray(snapshot.val().createdEvents)) {
-                //     setFlag("You have created no events");
+    //             //uncomment later!!!!!
+    //             // if (Array.isArray(snapshot.val().createdEvents)) {
+    //             //     setFlag("You have created no events");
                     
-                // }
-                // else {
-                //     let data = snapshot.val().createdEvents;
-                //     var objectData = Object.values(data);
-                //     objectData.shift();
-                //     setValArray(objectData);
-                //     let s = "";
-                //     for (var i = 0; i < valArray.length; i++) {
-                //         const result = await SelectEventData(objectData[i]);
-                //         s += result + "\n" + "\n";
-                //     }
-                //     setFlag(s);
-                // }
+    //             // }
+    //             // else {
+    //             //     let data = snapshot.val().createdEvents;
+    //             //     var objectData = Object.values(data);
+    //             //     objectData.shift();
+    //             //     setValArray(objectData);
+    //             //     let s = "";
+    //             //     for (var i = 0; i < valArray.length; i++) {
+    //             //         const result = await SelectEventData(objectData[i]);
+    //             //         s += result + "\n" + "\n";
+    //             //     }
+    //             //     setFlag(s);
+    //             // }
     
-                // setFName(snapshot.val().firstName)
-                // setLName(snapshot.val().lastName)
-                // setEmail(snapshot.val().emailAddress)r
-                // setPhoneNum(snapshot.val().phoneNumber)
-            }
-            else {
-                console.log("no data!!")
-                alert("No data found");
+    //             // setFName(snapshot.val().firstName)
+    //             // setLName(snapshot.val().lastName)
+    //             // setEmail(snapshot.val().emailAddress)r
+    //             // setPhoneNum(snapshot.val().phoneNumber)
+    //         }
+    //         else {
+    //             console.log("no data!!")
+    //             alert("No data found");
                 
-            }
-         })
-        .catch((error)=> {
-            console.log('weird')
-            alert("unsuccessful, error"+error);
-         });
-    }
+    //         }
+    //      })
+    //     .catch((error)=> {
+    //         console.log('weird')
+    //         alert("unsuccessful, error"+error);
+    //      });
+    // }
 
-    function getEventInfo(eid) {
-        const dbref  = ref(db)
+    // function getEventInfo(eid) {
+    //     const dbref  = ref(db)
         
 
-        get(child(dbref, `Events/${eid}`))
-            .then((snapshot) => {
-                if(snapshot.exists) {
-                    let info = snapshot.val()
-                    setEvents({
-                        ...events,
-                        eid: info
-                    })
-                    //events.eventId = info
-                    setEventStr(JSON.stringify(events))
-                    console.log(events)
-                } else {
-                    console.log("snapshot doesnt exist")
-                }
-            })
-            .catch((error) => console.log(error.message))
+    //     get(child(dbref, `Events/${eid}`))
+    //         .then((snapshot) => {
+    //             if(snapshot.exists) {
+    //                 let info = snapshot.val()
+    //                 setEvents({
+    //                     ...events,
+    //                     eid: info
+    //                 })
+    //                 //events.eventId = info
+    //                 setEventStr(JSON.stringify(events))
+    //                 console.log(events)
+    //             } else {
+    //                 console.log("snapshot doesnt exist")
+    //             }
+    //         })
+    //         .catch((error) => console.log(error.message))
 
-    }
+    // }
     
-    function selectEventData(eventId) {
-        const dbref = ref(db);
-        get(child(dbref, "Events/" + eventId)).then((snapshot)=> {
-            if (snapshot.exists()) {
-                setName(snapshot.val().name)
-                setDesc(snapshot.val().description)
-                setStartDate(snapshot.val().startDate)
-                setEndDate(snapshot.val().endDate)
-                setMax(snapshot.val().maxHours)
-                setCEmail(snapshot.val().contactEmail)
-                setCNumber(snapshot.val().contactNumber)
-                return new Promise((resolve) => {
-                    resolve(eventName + " " + descr + " " + sd + " " + ed + " " + max + " " + cEmail + " " + cNumber);
-                })
-            }
-            else {
-                alert("No data found")
+    // function selectEventData(eventId) {
+    //     const dbref = ref(db);
+    //     get(child(dbref, "Events/" + eventId)).then((snapshot)=> {
+    //         if (snapshot.exists()) {
+    //             setName(snapshot.val().name)
+    //             setDesc(snapshot.val().description)
+    //             setStartDate(snapshot.val().startDate)
+    //             setEndDate(snapshot.val().endDate)
+    //             setMax(snapshot.val().maxHours)
+    //             setCEmail(snapshot.val().contactEmail)
+    //             setCNumber(snapshot.val().contactNumber)
+    //             return new Promise((resolve) => {
+    //                 resolve(eventName + " " + descr + " " + sd + " " + ed + " " + max + " " + cEmail + " " + cNumber);
+    //             })
+    //         }
+    //         else {
+    //             alert("No data found")
                 
-            }
-         })
-         .catch((error)=> {
-            alert("unsuccessful, error"+error);
-         });
+    //         }
+    //      })
+    //      .catch((error)=> {
+    //         alert("unsuccessful, error"+error);
+    //      });
         
-    }
+    // }
 
-    const selectedData = SelectData(uid);
+    //const selectedData = SelectData(uid);
 
 
     
-    let createdArr = []
+    // let createdArr = []
     
-    for(let i = 1; i < created.length; i++) {
-        const dbref = ref(db);
-        let eid = created[i]
+    // for(let i = 1; i < created.length; i++) {
+    //     const dbref = ref(db);
+    //     let eid = created[i]
         
-        get(child(dbref, `Events/${eid}`))
-        .then((snapshot) => {
-            if(snapshot.exists) {
+    //     get(child(dbref, `Events/${eid}`))
+    //     .then((snapshot) => {
+    //         if(snapshot.exists) {
 
-                let info = snapshot.val()
-                createdArr.push(info)
-                setEventsArr(createdArr)
-                setEventStr(JSON.stringify(createdArr))
-            } else {
-                console.log("snapshot doesnt exist")
-            }
-        })
-        .catch((error) => console.log(error.message))
-    }
+    //             let info = snapshot.val()
+    //             createdArr.push(info)
+    //             setEventsArr(createdArr)
+    //             setEventStr(JSON.stringify(createdArr))
+    //             console.log(createdArr)
+    //         } else {
+    //             console.log("snapshot doesnt exist")
+    //         }
+    //     })
+    //     .catch((error) => console.log(error.message))
+    // }
     //console.log(events)
     
-    return (
-        
+    useEffect(() => {
+      get(child(dbref, "Users/" + uid))
+        .then((snapshot)=> {
+          if (snapshot.exists()) {
+              setCreated(Object.values(snapshot.val().createdEvents))
 
+              let createdArr = []
+              console.log(Object.values(snapshot.val().createdEvents))
+              for(let i = 1; i < Object.values(snapshot.val().createdEvents).length; i++) {
+                  //const dbref = ref(db);
+                  let eid = Object.values(snapshot.val().createdEvents)[i]
+                  
+                  get(child(dbref, `Events/${eid}`))
+                  .then((snapshot) => {
+                      if(snapshot.exists) {
+
+                          let info = snapshot.val()
+                          createdArr.push(info)
+                          setEventsArr(createdArr)
+                          setEventStr(JSON.stringify(createdArr))
+                          console.log(createdArr)
+                      } else {
+                          console.log("snapshot doesnt exist")
+                      }
+                  })
+                  .catch((error) => console.log(error.message))
+              }
+          }
+          else {
+              console.log("no data!!")
+              alert("No data found");            
+          }
+        })
+    .catch((error)=> {
+        console.log('weird')
+        alert("unsuccessful, error"+error);
+     });
+    }, [])
+
+    return (  
         <View>
             <Text style={{ fontSize: 24, color: 'red' }}>Created: {created.join()}</Text>
 
