@@ -26,6 +26,8 @@ const createdEvents = ({ navigation }) => {
     let [eventsArr, setEventsArr] = useState([])
     let [eventStr, setEventStr] = useState(JSON.stringify(events))
     let [created, setCreated] = useState([])
+    let [attendees, setAttendees] = useState({})
+    let [attendeesStr, setAttendeesStr] = useState(JSON.stringify(attendees))
 
     const dbref = ref(db);
 
@@ -51,6 +53,7 @@ const createdEvents = ({ navigation }) => {
                 }
             }
               let createdArr = []
+              let attendeesDict = {}
               // console log for created event keys
               console.log(Object.values(snapshot.val().createdEvents))
               // loop traversing through all created event keys
@@ -67,6 +70,45 @@ const createdEvents = ({ navigation }) => {
                           setEventsArr(createdArr)
                           setEventStr(JSON.stringify(createdArr))
                           console.log(createdArr)
+
+                          let attendeesArr = Object.values(snapshot.val().attendedUsers)
+                          let attendeesData = []
+                          for(let i = 1; i < attendeesArr.length; i++) {
+                            let cur = attendeesArr[i]
+                          
+                            get(child(dbref, `Users/${cur}`))
+                              .then((snapshot) => {
+                                if(snapshot.exists) {
+                                  let curData = {
+                                    uid: cur,
+                                    firstName: snapshot.val().firstName,
+                                    lastName: snapshot.val().lastName,
+                                    email: snapshot.val().emailAddress,
+                                    phone: snapshot.val().phoneNumber
+                                  }
+                                  attendeesData.push(curData)
+                                  console.log(`attendee data obj list ${attendeesData}`)
+
+                                  attendeesDict[eid] = attendeesData
+                                  setAttendees(attendeesDict)
+                                  setAttendeesStr(JSON.stringify(attendeesDict))
+                                  //setAttendees(attendeesDict)
+                                  //setAttendeesStr(JSON.stringify(attendeesDict))
+                                  //console.log(attendeesDict)
+                                } else {
+                                  alert(`attendee id ${cur} does not exist`)
+                                }
+                              })
+                              .catch((error) => alert(error.message))
+                          }
+                        
+                          //console.log(attendeesArr)
+                          // attendeesDict[eid] = attendeesData
+                          // console.log(attendeesDict)
+                          // setAttendees(attendeesDict)
+                          // setAttendeesStr(JSON.stringify(attendeesDict))
+                          console.log(attendeesDict)
+                          console.log(attendeesStr)
                       } else {
                           console.log("snapshot doesnt exist")
                       }
@@ -88,6 +130,8 @@ const createdEvents = ({ navigation }) => {
             <Text style={{ fontSize: 24, color: 'red' }}>{flag}</Text>
 
             <Text style={{ fontSize: 24, color: 'red' }}>Event info: {eventStr}</Text>
+
+            <Text style={{ fontSize: 24, color: 'orange' }}>Event info: {attendeesStr}</Text>
             
         </View>
     );
