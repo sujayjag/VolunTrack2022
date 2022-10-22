@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, Component } from "react";
 import {
   AppRegistry,
   StyleSheet,
@@ -11,60 +11,79 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import MapView from "react-native-maps";
+import { getAuth, signOut } from "firebase/auth";
+import { initializeApp, firebase } from 'firebase/app';
+import { getDatabase, ref, set, get, push, child, update, remove } from "firebase/database";
 
-const Images = [
-  { uri: "https://i.imgur.com/sNam9iJ.jpg" },
-  { uri: "https://i.imgur.com/N7rlQYt.jpg" },
-  { uri: "https://i.imgur.com/UDrH0wm.jpg" },
-  { uri: "https://i.imgur.com/Ka8kNST.jpg" }
-]
+import MapView from "react-native-maps";
+import Pic from "../assets/logo.png";
+
+const firebaseApp = initializeApp({
+  apiKey: "AIzaSyCtSa-qK2xb-Wky_vszWWACyTqru9c9l94",
+  authDomain: "voluntrack-ba589.firebaseapp.com",
+  projectId: "voluntrack-ba589",
+  storageBucket: "voluntrack-ba589.appspot.com",
+  messagingSenderId: "237292785966",
+  appId: "1:237292785966:web:8813a69013f743a1afaabf",
+  measurementId: "G-KN9SKC5DYZ",
+  databaseURL: "https://voluntrack-ba589-default-rtdb.firebaseio.com/"
+});
+
+const db = getDatabase(firebaseApp);
+
+const dbref = ref(db);
+
+// const auth = getAuth();
+// const user = auth.currentUser;
+// const uid = user.uid;
+
+// function getUsersEvents() {
+//   const dbref = ref(db);
+//   const auth = getAuth();
+//   const user = auth.currentUser;
+//   if (user!=null) {
+//     const uid = user.uid;
+//     get(child(dbref, "Users/" + uid))
+//       .then((snapshot) => {
+//         let data = snapshot.val().createdEvents;
+//         var objectData = Object.values(data);
+//         objectData.shift();
+//         let str = ""
+//         for (var i = 0; i < objectData.length; i++) {
+//           str = str + SelectData(objectData[i]);
+//         }
+//         console.log(str)
+//       })
+//       .catch((error) => alert(error.message))
+//   }
+// }
+
+// function SelectData(eventId) {
+//   get(child(dbref, "Events/" + eventId))
+//     .then((snapshot) => {
+//       nameArr.push(snapshot.val().name)
+//       descArr.push(snapshot.val().description)
+//     })
+//     .catch((error) => alert(error.message))
+// }
+
+// let nameArr = []
+// let descArr = []
+// getUsersEvents()
+
 
 const { width, height } = Dimensions.get("window");
 
 const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
+
+
 export default class screens extends Component {
   state = {
-    markers: [
-      {
-        coordinate: {
-          latitude: 45.524548,
-          longitude: -122.6749817,
-        },
-        title: "Best Place",
-        description: "This is the best place in Portland",
-        image: Images[0],
-      },
-      {
-        coordinate: {
-          latitude: 45.524698,
-          longitude: -122.6655507,
-        },
-        title: "Second Best Place",
-        description: "This is the second best place in Portland",
-        image: Images[1],
-      },
-      {
-        coordinate: {
-          latitude: 45.5230786,
-          longitude: -122.6701034,
-        },
-        title: "Third Best Place",
-        description: "This is the third best place in Portland",
-        image: Images[2],
-      },
-      {
-        coordinate: {
-          latitude: 45.521016,
-          longitude: -122.6561917,
-        },
-        title: "Fourth Best Place",
-        description: "This is the fourth best place in Portland",
-        image: Images[3],
-      },
-    ],
+    events: {},
+    eventKeys: [],
+    markers: [],
     region: {
       latitude: 45.52220671242907,
       longitude: -122.6653281029795,
@@ -72,25 +91,60 @@ export default class screens extends Component {
       longitudeDelta: 0.040142817690068,
     },
   };
-
+  
   componentWillMount() {
     this.index = 0;
     this.animation = new Animated.Value(0);
+    // this.getData
+    // console.log(this.state)
+
+    for (var i=0; i<nameArr.length; i++) {
+      let element = {
+        coordinate: {
+          latitude: 45.624548,
+          longitude: -122.7749817,
+        },
+        title: nameArr[i],
+        description: descArr[i],
+        image: Pic,
+      }
+      this.state.markers.push(element)
+    }
   }
   componentDidMount() {
+    get(child(dbref, 'Events/'))
+      .then((snapshot) => {
+        if(snapshot.exists) {
+          this.setState({
+            events: snapshot.val()
+          })
+          
+          this.setState({
+            eventKeys: Object.keys(this.state.events)
+          })
+          console.log(this.state.events)
+          console.log(this.state.eventKeys)
+        } else {
+          console.log("snapshot doesn't exist.")
+        }
+      })
+      .catch((error) => alert(error.message))
     // We should detect when scrolling has stopped then animate
     // We should just debounce the event listener here
     this.animation.addListener(({ value }) => {
+      let len = this.state.markers.length
+      
       let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
-      if (index >= this.state.markers.length) {
-        index = this.state.markers.length - 1;
+      if (index >= len) {
+        index = len - 1;
       }
       if (index <= 0) {
         index = 0;
       }
-
+      
       clearTimeout(this.regionTimeout);
       this.regionTimeout = setTimeout(() => {
+
         if (this.index !== index) {
           this.index = index;
           const { coordinate } = this.state.markers[index];
@@ -108,6 +162,7 @@ export default class screens extends Component {
   }
 
   render() {
+    this.getData
     const interpolations = this.state.markers.map((marker, index) => {
       const inputRange = [
         (index - 1) * CARD_WIDTH,
@@ -124,8 +179,15 @@ export default class screens extends Component {
         outputRange: [0.35, 1, 0.35],
         extrapolate: "clamp",
       });
+
+      
+
       return { scale, opacity };
+
+   
     });
+
+    
 
     return (
       <View style={styles.container}>

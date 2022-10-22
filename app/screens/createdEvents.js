@@ -22,173 +22,38 @@ const db = getDatabase(firebaseApp);
 const createdEvents = ({ navigation }) => {
     // let content;
     let [flag, setFlag] = useState("");
-    let [valArray, setValArray] = useState([])
-    let [events, setEvents] = useState({'test':0})
+    let [events, setEvents] = useState("None")
     let [eventsArr, setEventsArr] = useState([])
     let [eventStr, setEventStr] = useState(JSON.stringify(events))
     let [created, setCreated] = useState([])
-    let [createdStr, setCreatedStr] = useState('')
-
-    //let [eventName, setName] = useState("");
-    //let [descr, setDesc] = useState("");
-    //let [sd, setStartDate] = useState("");
-    //let [ed, setEndDate] = useState(""); 
-    //const [loc, setLoc] = useState(""); 
-    //let [max, setMax] = useState("");
-    //let [cEmail, setCEmail] = useState("");
-    //let [cNumber, setCNumber] = useState("");
-
-    let [eventName, setEventName] = useState('')
-    let [desc, setDesc] = useState('')
-    //let [region, setRegion] = React.useState({
-        //latitude: 0,
-        //longitude: 0,
-        //latitudeDelta: 0.01,
-        //longitudeDelta: 0.01
-    //})
 
     const dbref = ref(db);
 
     const auth = getAuth();
     const user = auth.currentUser;
     const uid = user.uid;
-
-
-
-    // function SelectData(uid) {
-    //     get(child(dbref, "Users/" + uid)).then((snapshot)=> {
-
-    //         if (snapshot.exists()) {
-    //             //console.log(snapshot.val())
-    //             //setEvents(snapshot.val())
-    //             //console.log(snapshot.val())
-                
-    //             //setEventStr(JSON.stringify(snapshot.val()))
-    //             setCreated(Object.values(snapshot.val().createdEvents))
-    //             //console.log(events)
-    //             //Array.isArray(dict)
-    //             // let num = (Object.keys(dict).length)
-
-
-    //             //uncomment later!!!!!
-    //             // if (Array.isArray(snapshot.val().createdEvents)) {
-    //             //     setFlag("You have created no events");
-                    
-    //             // }
-    //             // else {
-    //             //     let data = snapshot.val().createdEvents;
-    //             //     var objectData = Object.values(data);
-    //             //     objectData.shift();
-    //             //     setValArray(objectData);
-    //             //     let s = "";
-    //             //     for (var i = 0; i < valArray.length; i++) {
-    //             //         const result = await SelectEventData(objectData[i]);
-    //             //         s += result + "\n" + "\n";
-    //             //     }
-    //             //     setFlag(s);
-    //             // }
-    
-    //             // setFName(snapshot.val().firstName)
-    //             // setLName(snapshot.val().lastName)
-    //             // setEmail(snapshot.val().emailAddress)r
-    //             // setPhoneNum(snapshot.val().phoneNumber)
-    //         }
-    //         else {
-    //             console.log("no data!!")
-    //             alert("No data found");
-                
-    //         }
-    //      })
-    //     .catch((error)=> {
-    //         console.log('weird')
-    //         alert("unsuccessful, error"+error);
-    //      });
-    // }
-
-    // function getEventInfo(eid) {
-    //     const dbref  = ref(db)
-        
-
-    //     get(child(dbref, `Events/${eid}`))
-    //         .then((snapshot) => {
-    //             if(snapshot.exists) {
-    //                 let info = snapshot.val()
-    //                 setEvents({
-    //                     ...events,
-    //                     eid: info
-    //                 })
-    //                 //events.eventId = info
-    //                 setEventStr(JSON.stringify(events))
-    //                 console.log(events)
-    //             } else {
-    //                 console.log("snapshot doesnt exist")
-    //             }
-    //         })
-    //         .catch((error) => console.log(error.message))
-
-    // }
-    
-    // function selectEventData(eventId) {
-    //     const dbref = ref(db);
-    //     get(child(dbref, "Events/" + eventId)).then((snapshot)=> {
-    //         if (snapshot.exists()) {
-    //             setName(snapshot.val().name)
-    //             setDesc(snapshot.val().description)
-    //             setStartDate(snapshot.val().startDate)
-    //             setEndDate(snapshot.val().endDate)
-    //             setMax(snapshot.val().maxHours)
-    //             setCEmail(snapshot.val().contactEmail)
-    //             setCNumber(snapshot.val().contactNumber)
-    //             return new Promise((resolve) => {
-    //                 resolve(eventName + " " + descr + " " + sd + " " + ed + " " + max + " " + cEmail + " " + cNumber);
-    //             })
-    //         }
-    //         else {
-    //             alert("No data found")
-                
-    //         }
-    //      })
-    //      .catch((error)=> {
-    //         alert("unsuccessful, error"+error);
-    //      });
-        
-    // }
-
-    //const selectedData = SelectData(uid);
-
-
-    
-    // let createdArr = []
-    
-    // for(let i = 1; i < created.length; i++) {
-    //     const dbref = ref(db);
-    //     let eid = created[i]
-        
-    //     get(child(dbref, `Events/${eid}`))
-    //     .then((snapshot) => {
-    //         if(snapshot.exists) {
-
-    //             let info = snapshot.val()
-    //             createdArr.push(info)
-    //             setEventsArr(createdArr)
-    //             setEventStr(JSON.stringify(createdArr))
-    //             console.log(createdArr)
-    //         } else {
-    //             console.log("snapshot doesnt exist")
-    //         }
-    //     })
-    //     .catch((error) => console.log(error.message))
-    // }
-    //console.log(events)
     
     useEffect(() => {
       get(child(dbref, "Users/" + uid))
         .then((snapshot)=> {
           if (snapshot.exists()) {
-              setCreated(Object.values(snapshot.val().createdEvents))
-
+            if (Array.isArray(snapshot.val().createdEvents)) {
+                    setFlag("You have created no events");
+            }
+            // values of created event keys stored in state variable
+            else {
+                setCreated(Object.values(snapshot.val().createdEvents))
+                if (created.length == 2) {
+                    setFlag("You have created an event");
+                }
+                else {
+                    setFlag("You have created some events");
+                }
+            }
               let createdArr = []
+              // console log for created event keys
               console.log(Object.values(snapshot.val().createdEvents))
+              // loop traversing through all created event keys
               for(let i = 1; i < Object.values(snapshot.val().createdEvents).length; i++) {
                   //const dbref = ref(db);
                   let eid = Object.values(snapshot.val().createdEvents)[i]
@@ -210,21 +75,19 @@ const createdEvents = ({ navigation }) => {
               }
           }
           else {
-              console.log("no data!!")
               alert("No data found");            
           }
         })
     .catch((error)=> {
-        console.log('weird')
         alert("unsuccessful, error"+error);
      });
     }, [])
 
     return (  
         <View>
-            <Text style={{ fontSize: 24, color: 'red' }}>Created: {created.join()}</Text>
+            <Text style={{ fontSize: 24, color: 'red' }}>{flag}</Text>
 
-            <Text style={{ fontSize: 24, color: 'red' }}>Event info??: {eventStr}</Text>
+            <Text style={{ fontSize: 24, color: 'red' }}>Event info: {eventStr}</Text>
             
         </View>
     );
