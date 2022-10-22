@@ -29,9 +29,13 @@ const EventForm = ({ navigation }) => {
     const [cNumber, setCNumber] = useState("");
 
     function insertData() {
+        //const eventRef = db.ref('Events')
+        //const event = ref.child("Events")
+
         const auth = getAuth()
         const organizer = auth.currentUser
-        const eventData = push(ref(db, "Events/"),{
+        //const eventData = push(ref(db, "Events/"),{
+          const eventId = push(ref(db, "Events/"),{
           name: name,
           description: descr,
           startDate: startDate,
@@ -44,9 +48,10 @@ const EventForm = ({ navigation }) => {
           eventEnded: 1,
           attendedUsers: [0],
         })
-        .then(() => {
-          alert("Data Stored Successfully!");
-          navigation.navigate("Dashboard");   
+        .then((event) => {
+          alert("Data Stored Successfully! Event code is " + event.key);
+          navigation.navigate("GenerateCode", 
+                  {eId: event.key})  
         })
         .catch((error) => {
           const errorMessage = error.message;
@@ -141,8 +146,7 @@ const EventForm = ({ navigation }) => {
                     />
                 </View>
      
-                <TouchableOpacity style={styles.signOutButton} onPress={() => {insertData(); navigation.navigate("GenerateCode", 
-                  {eId: Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)})}}>
+                <TouchableOpacity style={styles.signOutButton} onPress={() => {insertData();}}>
                     <Text style={styles.signOutText}>Start Event</Text>
                 </TouchableOpacity>
             </View>
