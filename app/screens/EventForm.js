@@ -33,9 +33,9 @@ const EventForm = ({ navigation }) => {
         //const event = ref.child("Events")
 
         const auth = getAuth()
+        
         const organizer = auth.currentUser
-        //const eventData = push(ref(db, "Events/"),{
-          const eventId = push(ref(db, "Events/"),{
+        const payload = {
           name: name,
           description: descr,
           startDate: startDate,
@@ -47,11 +47,23 @@ const EventForm = ({ navigation }) => {
           contactNumber: cNumber,
           eventEnded: 1,
           attendedUsers: [0],
-        })
+        }
+        //const eventData = push(ref(db, "Events/"),{
+          const eventId = push(ref(db, "Events/"), payload)
         .then((event) => {
-          alert("Data Stored Successfully! Event code is " + event.key);
-          navigation.navigate("GenerateCode", 
-                  {eId: event.key})  
+          //alert("Data Stored Successfully! Event code is " + event.key);
+          //append event.key to uid.
+          // orgPath = "Users/" + organizer.uid + "createdEvents/" + event.key
+          set(ref(db, "Users/" + organizer.uid + "/createdEvents/" + event.key), payload)
+            .then(() => {
+              navigation.navigate("GenerateCode", 
+                  {eId: event.key}) 
+            })
+            .catch((error) => {
+              alert(error.message)
+            })
+
+           
         })
         .catch((error) => {
           const errorMessage = error.message;
