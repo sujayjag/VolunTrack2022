@@ -41,22 +41,21 @@ function getUsersEvents() {
   const dbref = ref(db);
   const auth = getAuth();
   const user = auth.currentUser;
-  const uid = user.uid;
-  get(child(dbref, "Users/" + uid))
-    .then((snapshot) => {
-      // console.log(snapshot.val().firstName)
-      // fName = snapshot.val().firstName
-
-      let data = snapshot.val().createdEvents;
-      var objectData = Object.values(data);
-      objectData.shift();
-      let str = ""
-      for (var i = 0; i < objectData.length; i++) {
-        str = str + SelectData(objectData[i]);
-      }
-      console.log(str)
-    })
-    .catch((error) => alert(error.message))
+  if (user!=null) {
+    const uid = user.uid;
+    get(child(dbref, "Users/" + uid))
+      .then((snapshot) => {
+        let data = snapshot.val().createdEvents;
+        var objectData = Object.values(data);
+        objectData.shift();
+        let str = ""
+        for (var i = 0; i < objectData.length; i++) {
+          str = str + SelectData(objectData[i]);
+        }
+        console.log(str)
+      })
+      .catch((error) => alert(error.message))
+  }
 }
 
 function SelectData(eventId) {
@@ -71,6 +70,7 @@ function SelectData(eventId) {
 let nameArr = []
 let descArr = []
 getUsersEvents()
+
 
 const { width, height } = Dimensions.get("window");
 
