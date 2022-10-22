@@ -4,7 +4,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, addDoc, collection, getFirestore } from "firebase/firestore";
 import { initializeApp, firebase } from 'firebase/app';
-import { getDatabase, ref, set, child, update, remove, get } from "firebase/database";
+import { getDatabase, ref, set, child, update, remove, get, push } from "firebase/database";
 //import { createStackNavigator, createAppContainer } from 'react-navigation';  
 
 export default function Join() {
@@ -53,7 +53,12 @@ export default function Join() {
           // alert(typeof(data))
           newPath = `Users/${uid}/attendedEvents/${data}`
           set(ref(db, newPath), snapshot.val())
-            .then(() => {alert("Lit")})
+            .then(() => {
+              //alert("Lit")
+             push(ref(db, path + "/attendedUsers/"), uid)
+              .then((event) => alert("Lit"))
+              .catch((error) => alert(error.message))
+            })
             .catch((error) => {alert(error.message)})
         } else {
           alert("hello")
