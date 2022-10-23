@@ -5,12 +5,6 @@ import QRCode from 'react-native-qrcode-svg';
 
 const viewCurrentCreated = ({ route, navigation }) => {
     const event = route.params;    
-    console.log("QRCODE DATA: " + JSON.stringify(event))
-    //const eventId = JSON.stringify(eId).slice(1,-1);
-    //console.log(eventId)
-
-    // const eventId = navigation.getParam('eId');
-    //comment
 
     return (
         <View style={styles.cont}>

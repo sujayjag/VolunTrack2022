@@ -42,8 +42,6 @@ const EventForm = ({ navigation }) => {
     })
 
     function insertData() {
-        //const eventRef = db.ref('Events')
-        //const event = ref.child("Events")
 
         const auth = getAuth()
         
@@ -61,12 +59,8 @@ const EventForm = ({ navigation }) => {
           eventEnded: 0,
           attendedUsers: [0],
         }
-        //const eventData = push(ref(db, "Events/"),{
         const eventId = push(ref(db, "Events/"), payload)
         .then((event) => {
-          //alert("Data Stored Successfully! Event code is " + event.key);
-          //append event.key to uid.
-          // orgPath = "Users/" + organizer.uid + "createdEvents/" + event.key
           push(ref(db, "Users/" + organizer.uid + "/createdEvents"), event.key)
             .then(() => {
               navigation.navigate("GenerateCode", 
@@ -108,14 +102,10 @@ const EventForm = ({ navigation }) => {
         insertData();
       }  
     
-    //const eventId = Math.floor(Math.random() * (999999999999 - 100000000000) + 100000000000)
     }
     return (
         <ScrollView>
             <View style={styles.container}>
-                {/* <View style={styles.logoContainer}>
-                    <Text style={styles.titleText}>Event Form </Text>
-                </View>  */}
                 <StatusBar style="auto"/>
                 <View style={styles.inputContainer}>
                     <View>

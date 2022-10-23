@@ -6,10 +6,7 @@ import QRCode from 'react-native-qrcode-svg';
 const GenerateCode = ({ route, navigation }) => {
     const { eId } = route.params;
     const eventId = JSON.stringify(eId).slice(1,-1);
-    console.log(eventId)
 
-    // const eventId = navigation.getParam('eId');
-    //comment
 
     return (
         <View style={styles.cont}>
@@ -25,7 +22,6 @@ const GenerateCode = ({ route, navigation }) => {
             <View style={{justifyContent: 'space-between'}}>
                 <Text style={styles.titleText}></Text>
             </View>
-            {/* <Text>Code: {eventId}</Text> */}
 
             <QRCode
               value={eventId}
@@ -34,14 +30,9 @@ const GenerateCode = ({ route, navigation }) => {
               logoSize={60}
               size={100}
               color={'#32174d'}
-              
-              // enableLinearGradient={true}
-              // linearGradient={['#f7ff00','#db36a4']}
-              // gradientDirection={[0,45,44,0]}
             />
 
             <View style={styles.container}>
-            {/* remember to add props */}
                 <TouchableOpacity style={styles.saveButton} onPress={() => navigation.navigate("createdCurrent")}>
                     <Text style={styles.saveText}>Save</Text>
                 </TouchableOpacity>

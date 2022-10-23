@@ -21,11 +21,9 @@ const firebaseApp = initializeApp({
 const db = getDatabase(firebaseApp);
 
 const joinedEvents = ({ navigation }) => {
-    // let content;
     let [flag, setFlag] = useState("");
     let [event, setEvent] = useState({})
     let [eventsArr, setEventsArr] = useState([])
-    //let [eventStr, setEventStr] = useState(JSON.stringify(events))
     let [joined, setJoined] = useState([])
     let [attendees, setAttendees] = useState({})
     let [attendeesStr, setAttendeesStr] = useState(JSON.stringify(attendees))
@@ -40,14 +38,12 @@ const joinedEvents = ({ navigation }) => {
       get(child(ref(db), 'Users/'+uid))
         .then((snapshot) => {
           const userInfo = snapshot.val()
-          console.log(userInfo)
           if(userInfo.currentEventId.length > 0) {
             setFlag("You are currently attending an event.")
             //populate event with event info.
             get(child(ref(db), 'Events/'+userInfo.currentEventId))
               .then((snapshot) => {
                 if(snapshot.exists()) {
-                  console.log(snapshot.val())
                   setEvent(snapshot.val())
                 } else {
                   setFlag("You are not currently attending an event.")
@@ -61,11 +57,8 @@ const joinedEvents = ({ navigation }) => {
         .catch((error) => alert(error.message))
     }, [])
 
-  //console.log('eventsArr:' + eventsArr)
-  console.log(Object.keys(event).length)
   if(Object.keys(event).length !== 0) {
-    return (           
-      //eventsArr.length !== 0 &&        
+    return (               
         <View>
           <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
            
@@ -98,8 +91,7 @@ const joinedEvents = ({ navigation }) => {
                                                         
    );
   } else {
-    return (           
-      //eventsArr.length !== 0 &&        
+    return (                  
         <View>
           <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
         </View>

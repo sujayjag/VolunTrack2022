@@ -6,7 +6,6 @@ import { doc, setDoc, addDoc, collection, getFirestore } from "firebase/firestor
 import { initializeApp, firebase } from 'firebase/app';
 import { getDatabase, ref, set, child, update, remove, get, push } from "firebase/database";
 import moment from 'moment';
-//import { createStackNavigator, createAppContainer } from 'react-navigation';  
 
 export default function Join() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -52,8 +51,6 @@ export default function Join() {
     var date = moment()
       .utcOffset('-5:00')
       .format('MM/DD/YYYY HH:mm');
-      //const oldCheck = checkedIn;
-      //setCheckedIn(!oldCheck)
       if (checkedIn) {
         update(ref(db, "Users/" + uid), {
           
@@ -63,7 +60,6 @@ export default function Join() {
         .then(() => {
           setButtonColor('red')
           setText('Successfully Checked Out!\nTap to scan into a new event')
-          alert("Data Stored Successfully!");
           setCheckedIn(false)
         })
         .catch((error) => {
@@ -80,7 +76,6 @@ export default function Join() {
         .then(() => {
           setButtonColor('green')
           setText('Successfully Checked In!\nTap to scan to check out')
-          alert("Data Stored Successfully!");
           setCheckedIn(true)
         })
         .catch((error) => {
@@ -92,20 +87,14 @@ export default function Join() {
     get(child(ref(db), path))
       .then((snapshot) => {
         if(snapshot.exists()) {
-          // alert('yay')
-          // alert(typeof(data))
 
           let newPath = `Users/${uid}/attendedEvents` 
           push(ref(db, newPath), data)
             .then((event) => {
-              //alert("Lit")
              push(ref(db, path + "/attendedUsers/"), uid)
-              //.then((event) => alert("Lit"))
               .catch((error) => alert(error.message))
             })
             .catch((error) => {alert(error.message)})
-        } else {
-          alert("error with users")
         }
       })
       .catch((error) => {})

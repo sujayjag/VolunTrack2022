@@ -52,8 +52,6 @@ const joinedEvents = ({ navigation }) => {
                 }
 
                 let joinedArr = []
-                // console log for attended event keys
-                console.log(Object.values(snapshot.val().attendedEvents))
                 // loop traversing through all attended event keys
                 for(let i = 1; i < Object.values(snapshot.val().attendedEvents).length; i++) {
                     //const dbref = ref(db);
@@ -77,16 +75,12 @@ const joinedEvents = ({ navigation }) => {
                                   });          
                               }
                           if (snapshot.val().eventEnded == 1) {
-                              console.log(JSON.stringify(snapshot.val()))
                               let info = snapshot.val()
                               joinedArr.push(info)
                               setEventsArr(joinedArr)
                               setEventStr(JSON.stringify(joinedArr))
-                              console.log(joinedArr)
                           }
-                        } else {
-                            console.log("snapshot doesnt exist")
-                        }
+                        } 
                     })
                     .catch((error) => console.log(error.message))
                 }
@@ -94,11 +88,8 @@ const joinedEvents = ({ navigation }) => {
             }
             let joinedArr = []
             let attendeesDict = {}
-            // console log for created event keys
-            //console.log(Object.values(snapshot.val().createdEvents))
             // loop traversing through all created event keys
             for(let i = 1; i < Object.values(snapshot.val().attendedEvents).length; i++) {
-                //const dbref = ref(db);
                 let eid = Object.values(snapshot.val().attendedEvents)[i]
                 
                 get(child(dbref, `Events/${eid}`))
@@ -109,7 +100,6 @@ const joinedEvents = ({ navigation }) => {
                         joinedArr.push(info)
                         setEventsArr(joinedArr)
                         setEventStr(JSON.stringify(joinedArr))
-                        console.log(snapshot.val().attendedUsers)
 
                         let attendeesArr = Object.values(snapshot.val().attendedUsers)
                         let attendeesData = []
@@ -127,31 +117,17 @@ const joinedEvents = ({ navigation }) => {
                                   phone: snapshot.val().phoneNumber
                                 }
                                 attendeesData.push(curData)
-                                //console.log(`attendee data obj list ${attendeesData}`)
 
                                 attendeesDict[eid] = attendeesData
                                 setAttendees(attendeesDict)
                                 setAttendeesStr(JSON.stringify(attendeesDict))
-                                //setAttendees(attendeesDict)
-                                //setAttendeesStr(JSON.stringify(attendeesDict))
-                                //console.log(attendeesDict)
                               } else {
                                 alert(`attendee id ${cur} does not exist`)
                               }
                             })
                             .catch((error) => alert(error.message))
                         }
-                      
-                        //console.log(attendeesArr)
-                        // attendeesDict[eid] = attendeesData
-                        // console.log(attendeesDict)
-                        // setAttendees(attendeesDict)
-                        // setAttendeesStr(JSON.stringify(attendeesDict))
-                        // console.log(attendeesDict)
-                        // console.log(attendeesStr)
                     }
-                    } else {
-                        console.log("snapshot doesnt exist")
                     }
                 })
                 .catch((error) => console.log(error.message))
@@ -165,8 +141,6 @@ const joinedEvents = ({ navigation }) => {
       alert("unsuccessful, error"+error);
    });
   }, [])
-
-  console.log('eventsArr:' + eventsArr)
 
   return (       
     <ScrollView>{

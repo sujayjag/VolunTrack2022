@@ -23,7 +23,6 @@ const firebaseApp = initializeApp({
 const db = getDatabase(firebaseApp);
 
 const createdEvents = ({ navigation }) => {
-    // let content;
     let [flag, setFlag] = useState("");
     let [events, setEvents] = useState("None")
     let [eventsArr, setEventsArr] = useState([])
@@ -45,25 +44,18 @@ const createdEvents = ({ navigation }) => {
           if (snapshot.exists()) {
             if (Array.isArray(snapshot.val().createdEvents)) {
                     setFlag("You have created no events");
-                    console.log(flag);
             }
-            // values of created event keys stored in state variable
             else {
                 setCreated(Object.values(snapshot.val().createdEvents))
                 if (created.length >= 2) {
                     setFlag("You have created one or more events");
-                    console.log(flag);
                 }
 
                 let createdArr = []
                 let tempEids = []
-                // console log for created event keys
-                //console.log("snapshot:" + JSON.stringify(snapshot.val()))
                 console.log(Object.values(snapshot.val().createdEvents))
-                // loop traversing through all created event keys
                 console.log("CURREENT SNAP SHOT:" + JSON.stringify(snapshot.val()))
                 for(let i = 1; i < Object.values(snapshot.val().createdEvents).length; i++) {
-                    //const dbref = ref(db);
                     var date = moment().utcOffset('-5:00').format('MM/DD/YYYY HH:mm');
 
                     let eid = Object.values(snapshot.val().createdEvents)[i]
@@ -83,7 +75,6 @@ const createdEvents = ({ navigation }) => {
                               });          
                           }
                           if (snapshot.val().eventEnded == 0) {
-                            // console.log(JSON.stringify(snapshot.val()))
                             let info = snapshot.val()
                             createdArr.push(info)
                             tempEids.push(eid)
@@ -91,10 +82,7 @@ const createdEvents = ({ navigation }) => {
                             
                             setEventsArr(createdArr)
                             setEventStr(JSON.stringify(createdArr))
-                            //console.log(createdArr)
                           }
-                        } else {
-                            console.log("snapshot doesnt exist")
                         }
                     })
                     .catch((error) => console.log(error.message))
@@ -102,11 +90,7 @@ const createdEvents = ({ navigation }) => {
             }
               let createdArr = []
               let attendeesDict = {}
-              // console log for created event keys
-              //console.log(Object.values(snapshot.val().createdEvents))
-              // loop traversing through all created event keys
               for(let i = 1; i < Object.values(snapshot.val().createdEvents).length; i++) {
-                  //const dbref = ref(db);
                   let eid = Object.values(snapshot.val().createdEvents)[i]
                   
                   get(child(dbref, `Events/${eid}`))
@@ -117,7 +101,6 @@ const createdEvents = ({ navigation }) => {
                           createdArr.push(info)
                           setEventsArr(createdArr)
                           setEventStr(JSON.stringify(createdArr))
-                          console.log(snapshot.val())
                         
                           let attendeesArr = Object.values(snapshot.val().attendedUsers)
                           let attendeesData = []
@@ -127,7 +110,6 @@ const createdEvents = ({ navigation }) => {
                             get(child(dbref, `Users/${cur}`))
                               .then((snapshot) => {
                                 if(snapshot.exists()) {
-                                  //console.log('SNAPSHOT of EVENT' + snapshot.val())
                                   let curData = {
                                     uid: cur,
                                     firstName: snapshot.val().firstName,
@@ -136,51 +118,25 @@ const createdEvents = ({ navigation }) => {
                                     phone: snapshot.val().phoneNumber
                                   }
                                   attendeesData.push(curData)
-                                  //console.log(`attendee data obj list ${attendeesData}`)
 
                                   attendeesDict[eid] = attendeesData
                                   setAttendees(attendeesDict)
                                   setAttendeesStr(JSON.stringify(attendeesDict))
-                                  console.log("ATTENDEES DICT:" + JSON.stringify(attendeesDict))
-                                  //setAttendees(attendeesDict)
-                                  //setAttendeesStr(JSON.stringify(attendeesDict))
-                                  //console.log(attendeesDict)
-                                } else {
-                                  alert(`attendee id ${cur} does not exist`)
                                 }
                               })
                               .catch((error) => alert(error.message))
                           }
-                        
-                          //console.log(attendeesArr)
-                          // attendeesDict[eid] = attendeesData
-                          // console.log(attendeesDict)
-                          // setAttendees(attendeesDict)
-                          // setAttendeesStr(JSON.stringify(attendeesDict))
-                          // console.log(attendeesDict)
-                          // console.log(attendeesStr)
                         }
-                      } else {
-                          console.log("snapshot doesnt exist")
-                      }
+                      } 
                   })
                   .catch((error) => console.log(error.message))
               }
           }
-          else {
-              alert("No data found");            
-          }
         })
     .catch((error)=> {
-        alert("unsuccessful, error"+error);
      });
     }, [])
 
-    //console.log('eventsArr:' + eventsArr)
-    // console.log(eventsArr[0])
-    // eventsArr.map((element) => {
-    //   console.log(element)
-    // })
     const handleClick = (eventObj) => {
       console.log("clicked!")
       navigation.navigate('viewCurrentCreated', {eids: eventObj})
@@ -188,8 +144,6 @@ const createdEvents = ({ navigation }) => {
     console.log("EID ARR: " + eidArr.join())
     console.log("EVENTS ARR: " + JSON.stringify(eventsArr))
     return (       
-      //<Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
-      //key={eidArr[index]} 
         <ScrollView keyboardShouldPersistTaps={true} style={{ marginBottom: 10 }}>
           {
           eventsArr.map((element, index) => { return (
@@ -229,10 +183,7 @@ const createdEvents = ({ navigation }) => {
                     logoSize={60}
                     size={300}
                     color={'#32174d'}
-                    
-                    // enableLinearGradient={true}
-                    // linearGradient={['#f7ff00','#db36a4']}
-                    // gradientDirection={[0,45,44,0]}
+
                   />
                   
               </Card>
