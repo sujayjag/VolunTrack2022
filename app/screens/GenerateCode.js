@@ -31,9 +31,9 @@ const GenerateCode = ({ route, navigation }) => {
               value={eventId}
               logo={require("../assets/logo.png")}
               logoBackgroundColor='white'
-              logoSize={80}
+              logoSize={60}
               size={300}
-              color={'#CF9FFF'}
+              color={'#32174d'}
               
               // enableLinearGradient={true}
               // linearGradient={['#f7ff00','#db36a4']}
