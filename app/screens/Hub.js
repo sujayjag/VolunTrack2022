@@ -33,45 +33,6 @@ const db = getDatabase(firebaseApp);
 
 const dbref = ref(db);
 
-// const auth = getAuth();
-// const user = auth.currentUser;
-// const uid = user.uid;
-
-// function getUsersEvents() {
-//   const dbref = ref(db);
-//   const auth = getAuth();
-//   const user = auth.currentUser;
-//   if (user!=null) {
-//     const uid = user.uid;
-//     get(child(dbref, "Users/" + uid))
-//       .then((snapshot) => {
-//         let data = snapshot.val().createdEvents;
-//         var objectData = Object.values(data);
-//         objectData.shift();
-//         let str = ""
-//         for (var i = 0; i < objectData.length; i++) {
-//           str = str + SelectData(objectData[i]);
-//         }
-//         console.log(str)
-//       })
-//       .catch((error) => alert(error.message))
-//   }
-// }
-
-// function SelectData(eventId) {
-//   get(child(dbref, "Events/" + eventId))
-//     .then((snapshot) => {
-//       nameArr.push(snapshot.val().name)
-//       descArr.push(snapshot.val().description)
-//     })
-//     .catch((error) => alert(error.message))
-// }
-
-// let nameArr = []
-// let descArr = []
-// getUsersEvents()
-
-
 const { width, height } = Dimensions.get("window");
 
 const CARD_HEIGHT = height / 4;
@@ -85,31 +46,16 @@ export default class screens extends Component {
     eventKeys: [],
     markers: [],
     region: {
-      latitude: 45.52220671242907,
-      longitude: -122.6653281029795,
-      latitudeDelta: 0.04864195044303443,
-      longitudeDelta: 0.040142817690068,
+      latitude: 33.7490,
+      longitude: -84.3880,
+      latitudeDelta: 0.0922*2,
+      longitudeDelta: 0.0421*2,
     },
   };
   
   componentWillMount() {
     this.index = 0;
     this.animation = new Animated.Value(0);
-    // this.getData
-    // console.log(this.state)
-
-    for (var i=0; i<nameArr.length; i++) {
-      let element = {
-        coordinate: {
-          latitude: 45.624548,
-          longitude: -122.7749817,
-        },
-        title: nameArr[i],
-        description: descArr[i],
-        image: Pic,
-      }
-      this.state.markers.push(element)
-    }
   }
   componentDidMount() {
     get(child(dbref, 'Events/'))
@@ -122,8 +68,35 @@ export default class screens extends Component {
           this.setState({
             eventKeys: Object.keys(this.state.events)
           })
-          console.log(this.state.events)
+          let locArr = []
+
+          for(let i = 0; i < Object.keys(this.state.events).length; i++) {
+            let curEvent = Object.keys(this.state.events)[i]
+            //console.log(curEvent)
+            //grab info from event directly
+            let element = {
+              eventId: curEvent,
+              coordinate: {                
+                latitude: snapshot.val()[Object.keys(this.state.events)[i]]['latitude'],
+                longitude: snapshot.val()[Object.keys(this.state.events)[i]]['longitude']
+              },
+              title: snapshot.val()[Object.keys(this.state.events)[i]]['name'],
+              description: snapshot.val()[Object.keys(this.state.events)[i]]['description'],
+              start: snapshot.val()[Object.keys(this.state.events)[i]]['startDate'],
+              end: snapshot.val()[Object.keys(this.state.events)[i]]['endDate'],
+              email: snapshot.val()[Object.keys(this.state.events)[i]]['contactEmail'],
+              number: snapshot.val()[Object.keys(this.state.events)[i]]['contactNumber'],
+              //image: Pic
+            }
+            
+            locArr.push(element)
+          }
+          this.setState({
+            markers: locArr
+          })
+          //console.log(this.state.events)
           console.log(this.state.eventKeys)
+          console.log(this.state.markers)
         } else {
           console.log("snapshot doesn't exist.")
         }
@@ -193,7 +166,11 @@ export default class screens extends Component {
       <View style={styles.container}>
         <MapView
           ref={map => this.map = map}
-          initialRegion={this.state.region}
+          initialRegion={{
+            latitude: 33.7490,
+            longitude: -84.3880,
+            latitudeDelta: 0.0922*2,
+            longitudeDelta: 0.0421*2}}
           style={styles.container}
         >
           {this.state.markers.map((marker, index) => {
@@ -239,16 +216,18 @@ export default class screens extends Component {
         >
           {this.state.markers.map((marker, index) => (
             <View style={styles.card} key={index}>
-              <Image
+              {/* <Image
                 source={marker.image}
                 style={styles.cardImage}
                 resizeMode="cover"
-              />
+              /> */}
               <View style={styles.textContent}>
-                <Text numberOfLines={1} style={styles.cardtitle}>{marker.title}</Text>
-                <Text numberOfLines={1} style={styles.cardDescription}>
-                  {marker.description}
-                </Text>
+                <Text numberOfLines={2} style={styles.cardtitle}>{marker.title}</Text>
+                <Text numberOfLines={5} style={styles.cardDescription}>{marker.description}</Text>
+                <Text></Text>
+                <Text numberOfLines={1} style={styles.cardDescription}>{marker.email}</Text>
+                <Text numberOfLines={1} style={styles.cardDescription}>{marker.number}</Text>
+                <Text numberOfLines={2} style={styles.cardDescription}>{marker.start} - {marker.end}</Text>
               </View>
             </View>
           ))}
@@ -264,7 +243,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     position: "absolute",
-    bottom: 30,
+    bottom: 70,
     left: 0,
     right: 0,
     paddingVertical: 10,
@@ -301,6 +280,7 @@ const styles = StyleSheet.create({
   },
   cardDescription: {
     fontSize: 12,
+    marginTop: 5,
     color: "#444",
   },
   markerWrap: {
