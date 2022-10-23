@@ -43,20 +43,19 @@ const joinedEvents = ({ navigation }) => {
             else {
                 setJoined(Object.values(snapshot.val().attendedEvents))
                 if (joined.length == 2) {
-                    setFlag("You have attended an event and one is ongoing");
+                    setFlag("You have attended an event");
                 }
                 else if (joined.length == 3) {
                     setFlag("You have attended an event and one is ongoing");
                 } 
                 else {
-                    setFlag("You have attended some event and one is ongoing");
+                    setFlag("You have attended some events and one is ongoing");
                 }
 
                 let joinedArr = []
                 // console log for attended event keys
                 console.log(Object.values(snapshot.val().attendedEvents))
                 // loop traversing through all attended event keys
-                let toggle = false;
                 for(let i = 1; i < Object.values(snapshot.val().attendedEvents).length; i++) {
                     //const dbref = ref(db);
                     let eid = Object.values(snapshot.val().attendedEvents)[i]

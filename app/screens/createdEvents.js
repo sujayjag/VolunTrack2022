@@ -49,6 +49,9 @@ const createdEvents = ({ navigation }) => {
                 if (created.length == 2) {
                     setFlag("You have created an event");
                 }
+                else if (created.length == 3) {
+                    setFlag("You have created an event and one is ongoing/upcoming");
+                } 
                 else {
                     setFlag("You have created multiple events");
                 }
@@ -64,12 +67,21 @@ const createdEvents = ({ navigation }) => {
                     get(child(dbref, `Events/${eid}`))
                     .then((snapshot) => {
                         if(snapshot.exists) {
-  
-                            let info = snapshot.val()
-                            createdArr.push(info)
-                            setEventsArr(createdArr)
-                            setEventStr(JSON.stringify(createdArr))
-                            console.log(createdArr)
+                            if (snapshot.val().eventEnded == 1) {
+                                let info = snapshot.val()
+                                createdArr.push(info)
+                                setEventsArr(createdArr)
+                                setEventStr(JSON.stringify(createdArr))
+                                console.log(createdArr)
+                                let toggle = true;
+                                console.log(Object.keys(createdArr).length);
+                                if ((Object.keys(createdArr).length) == 1 && toggle) {
+                                  setFlag("You have created an event");
+                                }
+                                if ((Object.keys(createdArr).length) > 1 && toggle) {
+                                  setFlag("You have created some events");
+                                }
+                            }
                         } else {
                             console.log("snapshot doesnt exist")
                         }
