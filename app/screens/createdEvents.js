@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useRe, useEffect } from "react";
-import { StyleSheet, View, SafeAreaView, Platform, ImageBackground, Image, Pressable, TextInput, TouchableOpacity} from 'react-native';
+import { ScrollView, StyleSheet, View, SafeAreaView, Platform, ImageBackground, Image, Pressable, TextInput, TouchableOpacity} from 'react-native';
 import { getAuth, signOut } from "firebase/auth";
 import { initializeApp, firebase } from 'firebase/app';
 import { getDatabase, ref, set, get, push, child, update, remove } from "firebase/database";
@@ -58,8 +58,10 @@ const createdEvents = ({ navigation }) => {
 
                 let createdArr = []
                 // console log for created event keys
-                console.log(Object.values(snapshot.val().createdEvents))
+                console.log("snapshot:" + JSON.stringify(snapshot.val()))
+                //console.log(Object.values(snapshot.val().createdEvents))
                 // loop traversing through all created event keys
+                console.log(Object.values(snapshot.val().createdEvents))
                 for(let i = 1; i < Object.values(snapshot.val().createdEvents).length; i++) {
                     //const dbref = ref(db);
                     let eid = Object.values(snapshot.val().createdEvents)[i]
@@ -67,21 +69,11 @@ const createdEvents = ({ navigation }) => {
                     get(child(dbref, `Events/${eid}`))
                     .then((snapshot) => {
                         if(snapshot.exists) {
-                            if (snapshot.val().eventEnded == 1) {
-                                let info = snapshot.val()
-                                createdArr.push(info)
-                                setEventsArr(createdArr)
-                                setEventStr(JSON.stringify(createdArr))
-                                console.log(createdArr)
-                                let toggle = true;
-                                console.log(Object.keys(createdArr).length);
-                                if ((Object.keys(createdArr).length) == 1 && toggle) {
-                                  setFlag("You have created an event");
-                                }
-                                if ((Object.keys(createdArr).length) > 1 && toggle) {
-                                  setFlag("You have created some events");
-                                }
-                            }
+                            let info = snapshot.val()
+                            createdArr.push(info)
+                            setEventsArr(createdArr)
+                            setEventStr(JSON.stringify(createdArr))
+                            //console.log(createdArr)
                         } else {
                             console.log("snapshot doesnt exist")
                         }
@@ -106,7 +98,7 @@ const createdEvents = ({ navigation }) => {
                           createdArr.push(info)
                           setEventsArr(createdArr)
                           setEventStr(JSON.stringify(createdArr))
-                          console.log(createdArr)
+                          console.log(snapshot.val().attendedUsers)
 
                           let attendeesArr = Object.values(snapshot.val().attendedUsers)
                           let attendeesData = []
@@ -124,7 +116,7 @@ const createdEvents = ({ navigation }) => {
                                     phone: snapshot.val().phoneNumber
                                   }
                                   attendeesData.push(curData)
-                                  console.log(`attendee data obj list ${attendeesData}`)
+                                  //console.log(`attendee data obj list ${attendeesData}`)
 
                                   attendeesDict[eid] = attendeesData
                                   setAttendees(attendeesDict)
@@ -144,8 +136,8 @@ const createdEvents = ({ navigation }) => {
                           // console.log(attendeesDict)
                           // setAttendees(attendeesDict)
                           // setAttendeesStr(JSON.stringify(attendeesDict))
-                          console.log(attendeesDict)
-                          console.log(attendeesStr)
+                          // console.log(attendeesDict)
+                          // console.log(attendeesStr)
                       } else {
                           console.log("snapshot doesnt exist")
                       }
@@ -162,40 +154,51 @@ const createdEvents = ({ navigation }) => {
      });
     }, [])
 
-    return ( 
-      <View>
-      {eventsArr.length !== 0 &&
-      <View>
-      <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
+    console.log('eventsArr:' + eventsArr)
+    // console.log(eventsArr[0])
+    // eventsArr.map((element) => {
+    //   console.log(element)
+    // })
+    return (       
+        <ScrollView>{
+          // eventsArr.length !== 0 &&
+          eventsArr.map((element, index) => { return (
+            <View>
+              {/* <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
+              <Text style={{ fontSize: 24, color: 'red' }}>Event info: {JSON.stringify(eventsArr[0]['name'])}</Text>
+              <Text style={{ fontSize: 24, color: 'grey' }}>Event info: {eventStr}</Text>
 
-      <Text style={{ fontSize: 24, color: 'orange' }}>Event info: {attendeesStr}</Text>
-      {/* <Text style={{ fontSize: 24, color: 'red' }}>Event info: {eventStr}</Text> */}
-      
-      <Card containerStyle={{ marginTop: 15 }}>
-          <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{eventsArr[0]['name']}</Card.Title>            
-          <Card.Divider />
-          <Text style={styles.fonts}>
-              Description: {eventsArr[0]['description']}
-          </Text>
-          <Text style={styles.fonts}>
-              Start Date & Time: {eventsArr[0]['startDate'].split(' ')[0]} at {eventsArr[0]['startDate'].split(' ')[1]}
-          </Text>
-          <Text style={styles.fonts}>
-              End Date & Time: {eventsArr[0]['endDate'].split(' ')[0]} at {eventsArr[0]['endDate'].split(' ')[1]}
-          </Text>
-          <Text style={styles.fonts}>
-              Location: ({eventsArr[0]['latitude']}, {eventsArr[0]['longitude']})
-          </Text>
-          <Text style={styles.fonts}>
-              Contact Email: {eventsArr[0]['contactEmail']}
-          </Text>
-          <Text style={styles.fonts}>
-              Contact Number: {eventsArr[0]['contactNumber'].substring(0, 3)}-{eventsArr[0]['contactNumber'].substring(3, 6)}-{eventsArr[0]['contactNumber'].substring(6, 10)}
-          </Text>
-      </Card>
-      </View>
-      }
-      </View>
+              <Text style={{ fontSize: 24, color: 'orange' }}>Event info: {attendeesStr}</Text>   */}
+              <Card containerStyle={{ marginTop: 15 }}>
+                <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{eventsArr[index]?.name}</Card.Title>            
+                <Card.Divider />                              
+
+                <Text style={styles.fonts}>
+                    Description: {eventsArr[index]?.description}
+                </Text>
+                <Text style={styles.fonts}>
+                    Start Date & Time: {eventsArr[index]?.startDate.split(' ')[0]} at {eventsArr[index]?.startDate.split(' ')[1]}
+                </Text>
+                <Text style={styles.fonts}>
+                    End Date & Time: {eventsArr[index]?.endDate.split(' ')[0]} at {eventsArr[index]?.endDate.split(' ')[1]}
+                </Text>
+                <Text style={styles.fonts}>
+                    Location: ({eventsArr[index]?.latitude}, {eventsArr[index]?.longitude})
+                </Text>
+                <Text style={styles.fonts}>
+                    Attendees: {Object.keys(eventsArr[index]?.attendedUsers).length - 1}
+                </Text>
+                <Text style={styles.fonts}>
+                    Contact Email: {eventsArr[index]?.contactEmail}
+                </Text>
+                <Text style={styles.fonts}>
+                    Contact Number: {eventsArr[index]?.contactNumber.substring(0, 3)}-{eventsArr[index]?.contactNumber.substring(3, 6)}-{eventsArr[index]?.contactNumber.substring(6, 10)}
+                </Text>
+            </Card> 
+            </View>
+            )})
+          }                                            
+        </ScrollView>
     );
 };
 
