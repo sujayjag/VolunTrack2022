@@ -163,7 +163,6 @@ const createdEvents = ({ navigation }) => {
     // })
     return (       
         <ScrollView>{
-          //eventsArr.length !== 0 &&
           eventsArr.map((element, index) => { return (
             <View>
               <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>

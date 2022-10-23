@@ -125,23 +125,20 @@ export default class screens extends Component {
           let locArr = []
 
           for(let i = 0; i < Object.keys(this.state.events).length; i++) {
-            let curEvent = Object.keys(this.state.events)[i]
-            //console.log(curEvent)
-            //grab info from event directly
-            let element = {
-              eventId: curEvent,
-              coordinate: {                
-                latitude: snapshot.val()[Object.keys(this.state.events)[i]]['latitude'],
-                longitude: snapshot.val()[Object.keys(this.state.events)[i]]['longitude']
-                // latitude: 45.624548,
-                //longitude: -122.7749817,
-              },
-              title: snapshot.val()[Object.keys(this.state.events)[i]]['name'],
-              description: snapshot.val()[Object.keys(this.state.events)[i]]['description'],
-              image: Pic
+            if (snapshot.val()[Object.keys(this.state.events)[i]]['eventEnded'] == 0) {
+              let element = {
+                eventId: curEvent = Object.keys(this.state.events)[i],
+                coordinate: {                
+                  latitude: snapshot.val()[Object.keys(this.state.events)[i]]['latitude'],
+                  longitude: snapshot.val()[Object.keys(this.state.events)[i]]['longitude']
+                },
+                title: snapshot.val()[Object.keys(this.state.events)[i]]['name'],
+                description: snapshot.val()[Object.keys(this.state.events)[i]]['description'],
+                image: Pic
+              }
+              
+              locArr.push(element)
             }
-            
-            locArr.push(element)
           }
           this.setState({
             markers: locArr
