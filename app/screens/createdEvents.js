@@ -179,11 +179,12 @@ const createdEvents = ({ navigation }) => {
     //   console.log(element)
     // })
     return (       
-        <ScrollView>{
+        <ScrollView>
           //eventsArr.length !== 0 &&
+          <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text> {
           eventsArr.map((element, index) => { return (
             <View>
-              <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
+              
               <Card containerStyle={{ marginTop: 15 }}>
                 <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{eventsArr[index]?.name}</Card.Title>            
                 <Card.Divider />                              
