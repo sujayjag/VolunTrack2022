@@ -88,6 +88,8 @@ export default class screens extends Component {
               number: snapshot.val()[Object.keys(this.state.events)[i]]['contactNumber'],
               //image: Pic
             }
+            
+            locArr.push(element)
           }
           this.setState({
             markers: locArr
@@ -241,7 +243,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     position: "absolute",
-    bottom: 70,
+    bottom: 50,
     left: 0,
     right: 0,
     paddingVertical: 10,

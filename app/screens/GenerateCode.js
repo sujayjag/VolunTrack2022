@@ -51,12 +51,6 @@ const GenerateCode = ({ route, navigation }) => {
                 <View style={{justifyContent: 'space-between'}}>
                     <Text style={styles.titleText}></Text>
                 </View>
-                <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate("Dashboard")}>
-                    <Text style={styles.shareText}>Share</Text>
-                </TouchableOpacity>
-                <View style={{justifyContent: 'space-between'}}>
-                    <Text style={styles.titleText}></Text>
-                </View>
                 <View style={{justifyContent: 'space-between'}}>
                     <Text style={styles.titleText}></Text>
                 </View>
