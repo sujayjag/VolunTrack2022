@@ -46,6 +46,20 @@ export default function Join() {
     const db = getDatabase(firebaseApp);
     const uid = getAuth().currentUser.uid
     const path = `Events/${data}`
+    
+      set(ref(db, `Users/${uid}`),{
+        currentEventId: data,
+        currentEventStartTime: 0,
+      })
+      .then(() => {
+        alert("Data Stored Successfully!");
+        navigation.navigate("Dashboard");   
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        alert(errorMessage);
+      });
+
     get(child(ref(db), path))
       .then((snapshot) => {
         if(snapshot.exists()) {
