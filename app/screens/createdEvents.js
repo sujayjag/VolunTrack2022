@@ -35,25 +35,27 @@ const createdEvents = ({ navigation }) => {
     const auth = getAuth();
     const user = auth.currentUser;
     const uid = user.uid;
-    
+
     useEffect(() => {
       get(child(dbref, "Users/" + uid))
         .then((snapshot)=> {
           if (snapshot.exists()) {
             if (Array.isArray(snapshot.val().createdEvents)) {
                     setFlag("You have created no events");
+                    console.log(flag);
             }
             // values of created event keys stored in state variable
             else {
                 setCreated(Object.values(snapshot.val().createdEvents))
                 if (created.length >= 2) {
                     setFlag("You have created one or more events");
+                    console.log(flag);
                 }
 
                 let createdArr = []
                 // console log for created event keys
                 //console.log("snapshot:" + JSON.stringify(snapshot.val()))
-                //console.log(Object.values(snapshot.val().createdEvents))
+                console.log(Object.values(snapshot.val().createdEvents))
                 // loop traversing through all created event keys
                 console.log("CURREENT SNAP SHOT:" + JSON.stringify(snapshot.val()))
                 for(let i = 1; i < Object.values(snapshot.val().createdEvents).length; i++) {
@@ -63,12 +65,14 @@ const createdEvents = ({ navigation }) => {
                     get(child(dbref, `Events/${eid}`))
                     .then((snapshot) => {
                         if(snapshot.exists()) {
-                            console.log(JSON.stringify(snapshot.val()))
+                          if (snapshot.val().eventEnded == 1) {
+                            // console.log(JSON.stringify(snapshot.val()))
                             let info = snapshot.val()
                             createdArr.push(info)
                             setEventsArr(createdArr)
                             setEventStr(JSON.stringify(createdArr))
                             //console.log(createdArr)
+                          }
                         } else {
                             console.log("snapshot doesnt exist")
                         }
@@ -88,13 +92,13 @@ const createdEvents = ({ navigation }) => {
                   get(child(dbref, `Events/${eid}`))
                   .then((snapshot) => {
                       if(snapshot.exists()) {
-
+                        if (snapshot.val().eventEnded == 1) {
                           let info = snapshot.val()
                           createdArr.push(info)
                           setEventsArr(createdArr)
                           setEventStr(JSON.stringify(createdArr))
                           console.log(snapshot.val())
-
+                        
                           let attendeesArr = Object.values(snapshot.val().attendedUsers)
                           let attendeesData = []
                           for(let i = 1; i < attendeesArr.length; i++) {
@@ -135,6 +139,7 @@ const createdEvents = ({ navigation }) => {
                           // setAttendeesStr(JSON.stringify(attendeesDict))
                           // console.log(attendeesDict)
                           // console.log(attendeesStr)
+                        }
                       } else {
                           console.log("snapshot doesnt exist")
                       }
@@ -158,10 +163,10 @@ const createdEvents = ({ navigation }) => {
     // })
     return (       
         <ScrollView>{
-          eventsArr.length !== 0 &&
+          //eventsArr.length !== 0 &&
           eventsArr.map((element, index) => { return (
             <View>
-              {<Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>}
+              <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
               <Card containerStyle={{ marginTop: 15 }}>
                 <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{eventsArr[index]?.name}</Card.Title>            
                 <Card.Divider />                              
