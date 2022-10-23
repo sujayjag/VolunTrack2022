@@ -65,19 +65,12 @@ const joinedEvents = ({ navigation }) => {
                     .then((snapshot) => {
                         if(snapshot.exists) {
                           if (snapshot.val().eventEnded == 1) {
+                              console.log(JSON.stringify(snapshot.val()))
                               let info = snapshot.val()
                               joinedArr.push(info)
                               setEventsArr(joinedArr)
                               setEventStr(JSON.stringify(joinedArr))
-                              console.log(joinedArr)
-                              let toggle = true;
-                              console.log(Object.keys(joinedArr).length);
-                              if ((Object.keys(joinedArr).length) == 1 && toggle) {
-                                setFlag("You have attended an event");
-                              }
-                              if ((Object.keys(joinedArr).length) > 1 && toggle) {
-                                setFlag("You have attended some events");
-                              }
+                              //console.log(joinedArr)
                           }
                         } else {
                             console.log("snapshot doesnt exist")
