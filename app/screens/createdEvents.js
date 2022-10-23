@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useRe, useEffect } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
+import { ScrollView, StyleSheet, View, SafeAreaView, Platform, ImageBackground, Image, Pressable, TextInput, TouchableOpacity} from 'react-native';
 import { getAuth, signOut } from "firebase/auth";
 import { initializeApp, firebase } from 'firebase/app';
 import { getDatabase, ref, set, get, push, child, update, remove } from "firebase/database";
 import { delay } from 'q';
+import { Text, Card, Button, Icon } from '@rneui/themed';
 
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyCtSa-qK2xb-Wky_vszWWACyTqru9c9l94",
@@ -34,53 +35,44 @@ const createdEvents = ({ navigation }) => {
     const auth = getAuth();
     const user = auth.currentUser;
     const uid = user.uid;
-    
+
     useEffect(() => {
       get(child(dbref, "Users/" + uid))
         .then((snapshot)=> {
           if (snapshot.exists()) {
             if (Array.isArray(snapshot.val().createdEvents)) {
                     setFlag("You have created no events");
+                    console.log(flag);
             }
             // values of created event keys stored in state variable
             else {
                 setCreated(Object.values(snapshot.val().createdEvents))
-                if (created.length == 2) {
-                    setFlag("You have created an event");
-                }
-                else if (created.length == 3) {
-                    setFlag("You have created an event and one is ongoing/upcoming");
-                } 
-                else {
-                    setFlag("You have created some events and some are ongoing/upcoming");
+                if (created.length >= 2) {
+                    setFlag("You have created one or more events");
+                    console.log(flag);
                 }
 
                 let createdArr = []
                 // console log for created event keys
+                //console.log("snapshot:" + JSON.stringify(snapshot.val()))
                 console.log(Object.values(snapshot.val().createdEvents))
                 // loop traversing through all created event keys
+                console.log("CURREENT SNAP SHOT:" + JSON.stringify(snapshot.val()))
                 for(let i = 1; i < Object.values(snapshot.val().createdEvents).length; i++) {
                     //const dbref = ref(db);
                     let eid = Object.values(snapshot.val().createdEvents)[i]
-                    
+                    console.log("EIDDDDD:" + eid)
                     get(child(dbref, `Events/${eid}`))
                     .then((snapshot) => {
-                        if(snapshot.exists) {
-                            if (snapshot.val().eventEnded == 1) {
-                                let info = snapshot.val()
-                                createdArr.push(info)
-                                setEventsArr(createdArr)
-                                setEventStr(JSON.stringify(createdArr))
-                                console.log(createdArr)
-                                let toggle = true;
-                                console.log(Object.keys(createdArr).length);
-                                if ((Object.keys(createdArr).length) == 1 && toggle) {
-                                  setFlag("You have created an event");
-                                }
-                                if ((Object.keys(createdArr).length) > 1 && toggle) {
-                                  setFlag("You have created some events");
-                                }
-                            }
+                        if(snapshot.exists()) {
+                          if (snapshot.val().eventEnded == 1) {
+                            // console.log(JSON.stringify(snapshot.val()))
+                            let info = snapshot.val()
+                            createdArr.push(info)
+                            setEventsArr(createdArr)
+                            setEventStr(JSON.stringify(createdArr))
+                            //console.log(createdArr)
+                          }
                         } else {
                             console.log("snapshot doesnt exist")
                         }
@@ -91,7 +83,7 @@ const createdEvents = ({ navigation }) => {
               let createdArr = []
               let attendeesDict = {}
               // console log for created event keys
-              console.log(Object.values(snapshot.val().createdEvents))
+              //console.log(Object.values(snapshot.val().createdEvents))
               // loop traversing through all created event keys
               for(let i = 1; i < Object.values(snapshot.val().createdEvents).length; i++) {
                   //const dbref = ref(db);
@@ -99,14 +91,14 @@ const createdEvents = ({ navigation }) => {
                   
                   get(child(dbref, `Events/${eid}`))
                   .then((snapshot) => {
-                      if(snapshot.exists) {
-
+                      if(snapshot.exists()) {
+                        if (snapshot.val().eventEnded == 1) {
                           let info = snapshot.val()
                           createdArr.push(info)
                           setEventsArr(createdArr)
                           setEventStr(JSON.stringify(createdArr))
-                          console.log(createdArr)
-
+                          console.log(snapshot.val())
+                        
                           let attendeesArr = Object.values(snapshot.val().attendedUsers)
                           let attendeesData = []
                           for(let i = 1; i < attendeesArr.length; i++) {
@@ -114,7 +106,8 @@ const createdEvents = ({ navigation }) => {
                           
                             get(child(dbref, `Users/${cur}`))
                               .then((snapshot) => {
-                                if(snapshot.exists) {
+                                if(snapshot.exists()) {
+                                  //console.log('SNAPSHOT of EVENT' + snapshot.val())
                                   let curData = {
                                     uid: cur,
                                     firstName: snapshot.val().firstName,
@@ -123,11 +116,12 @@ const createdEvents = ({ navigation }) => {
                                     phone: snapshot.val().phoneNumber
                                   }
                                   attendeesData.push(curData)
-                                  console.log(`attendee data obj list ${attendeesData}`)
+                                  //console.log(`attendee data obj list ${attendeesData}`)
 
                                   attendeesDict[eid] = attendeesData
                                   setAttendees(attendeesDict)
                                   setAttendeesStr(JSON.stringify(attendeesDict))
+                                  console.log("ATTENDEES DICT:" + JSON.stringify(attendeesDict))
                                   //setAttendees(attendeesDict)
                                   //setAttendeesStr(JSON.stringify(attendeesDict))
                                   //console.log(attendeesDict)
@@ -143,8 +137,9 @@ const createdEvents = ({ navigation }) => {
                           // console.log(attendeesDict)
                           // setAttendees(attendeesDict)
                           // setAttendeesStr(JSON.stringify(attendeesDict))
-                          console.log(attendeesDict)
-                          console.log(attendeesStr)
+                          // console.log(attendeesDict)
+                          // console.log(attendeesStr)
+                        }
                       } else {
                           console.log("snapshot doesnt exist")
                       }
@@ -161,17 +156,71 @@ const createdEvents = ({ navigation }) => {
      });
     }, [])
 
-    return (  
-        <View>
-            <Text style={{ fontSize: 24, color: 'red' }}>{flag}</Text>
+    //console.log('eventsArr:' + eventsArr)
+    // console.log(eventsArr[0])
+    // eventsArr.map((element) => {
+    //   console.log(element)
+    // })
+    return (       
+        <ScrollView>{
+          //eventsArr.length !== 0 &&
+          eventsArr.map((element, index) => { return (
+            <View>
+              <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
+              <Card containerStyle={{ marginTop: 15 }}>
+                <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{eventsArr[index]?.name}</Card.Title>            
+                <Card.Divider />                              
 
-            <Text style={{ fontSize: 24, color: 'red' }}>Event info: {eventStr}</Text>
-
-            <Text style={{ fontSize: 24, color: 'orange' }}>Event info: {attendeesStr}</Text>
-            
-        </View>
+                <Text style={styles.fonts}>
+                    Description: {eventsArr[index]?.description}
+                </Text>
+                <Text style={styles.fonts}>
+                    Start Date & Time: {eventsArr[index]?.startDate.split(' ')[0]} at {eventsArr[index]?.startDate.split(' ')[1]}
+                </Text>
+                <Text style={styles.fonts}>
+                    End Date & Time: {eventsArr[index]?.endDate.split(' ')[0]} at {eventsArr[index]?.endDate.split(' ')[1]}
+                </Text>
+                <Text style={styles.fonts}>
+                    Location: ({eventsArr[index]?.latitude}, {eventsArr[index]?.longitude})
+                </Text>
+                <Text style={styles.fonts}>
+                    Number of Attendees: {Object.keys(eventsArr[index]?.attendedUsers).length - 1}
+                </Text>
+                <Text style={styles.fonts}>
+                    Contact Email: {eventsArr[index]?.contactEmail}
+                </Text>
+                <Text style={styles.fonts}>
+                    Contact Number: {eventsArr[index]?.contactNumber.substring(0, 3)}-{eventsArr[index]?.contactNumber.substring(3, 6)}-{eventsArr[index]?.contactNumber.substring(6, 10)}
+                </Text>
+            </Card> 
+            </View>
+            )})
+          }                                            
+        </ScrollView>
     );
 };
 
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    fonts: {
+      marginBottom: 8,
+      fontSize: 12
+    },
+    user: {
+      flexDirection: 'row',
+      marginBottom: 6,
+    },
+    image: {
+      width: 30,
+      height: 30,
+      marginRight: 10,
+    },
+    name: {
+      fontSize: 16,
+      marginTop: 5,
+    },
+});
 
 export default createdEvents; 
