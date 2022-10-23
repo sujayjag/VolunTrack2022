@@ -32,8 +32,6 @@ const EventForm = ({ navigation }) => {
     const [descr, setDesc] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState(""); 
-    //const [loc, setLoc] = useState(""); 
-    const [max, setMax] = useState("");
     const [cEmail, setCEmail] = useState("");
     const [cNumber, setCNumber] = useState("");
     const [region, setRegion] = useState({
@@ -57,7 +55,6 @@ const EventForm = ({ navigation }) => {
           endDate: endDate,
           latitude: region["latitude"],
           longitude: region["longitude"],
-          maxHours: max,
           organizerId: organizer.uid,
           contactEmail: cEmail,
           contactNumber: cNumber,
@@ -87,12 +84,12 @@ const EventForm = ({ navigation }) => {
         });
       }
 
-    const validateEvent = (n, d, sd, ed, mh, ce, cn, r) => {
+    const validateEvent = (n, d, sd, ed, ce, cn, r) => {
       let phoneRe = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/
       let emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       let dateRe =  /^[0-1][0-9]\/[0-3][0-9]\/[0-2][0-9][0-9][0-9]\ [0-2][0-9]\:[0-6][0-9]$/
       //fname, lname, phone, email, password, confirm password, in order.
-      if(!(n && d && sd && ed && mh && ce && cn && r)) {
+      if(!(n && d && sd && ed && ce && cn && r)) {
         alert(`Please fill out all fields`);
         return;
       }
@@ -107,9 +104,6 @@ const EventForm = ({ navigation }) => {
       }
       else if(!dateRe.test(String(ed).toLowerCase())) {
         alert("Please enter a valid end date and time")
-      } 
-      else if (!Number.isInteger(parseInt(mh))) {
-        alert("Please enter a valid numbers of max hours")
       } else {
         insertData();
       }  
@@ -181,15 +175,6 @@ const EventForm = ({ navigation }) => {
                     <View style={styles.inputView}>
                         <TextInput
                         style={styles.TextInput}
-                        placeholder="Max Hours"
-                        placeholderTextColor="#003f5c"
-                        autoCorrect="False"
-                        onChangeText={(max) => setMax(max)}
-                        />
-                    </View>
-                    <View style={styles.inputView}>
-                        <TextInput
-                        style={styles.TextInput}
                         placeholder="Contact email"
                         placeholderTextColor="#003f5c"
                         autoCorrect="False"
@@ -206,7 +191,7 @@ const EventForm = ({ navigation }) => {
                         />
                     </View>
                     
-                    <TouchableOpacity style={styles.signOutButton} onPress={() => {validateEvent(name, descr, startDate, endDate, max, cEmail, cNumber, region)} }>
+                    <TouchableOpacity style={styles.signOutButton} onPress={() => {validateEvent(name, descr, startDate, endDate, cEmail, cNumber, region)} }>
                         <Text style={styles.signOutText}>Start Event</Text>
                     </TouchableOpacity>
                 </View>

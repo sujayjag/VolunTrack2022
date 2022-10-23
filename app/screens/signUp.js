@@ -53,7 +53,7 @@ const db = getDatabase(firebaseApp);
         attendedEvents:  [0],
       })
       .then(() => {
-        alert("Data Stored Successfully!");
+        //alert("Data Stored Successfully!");
         navigation.navigate("Dashboard");   
       })
       .catch((error) => {

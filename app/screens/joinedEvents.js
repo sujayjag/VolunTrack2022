@@ -6,6 +6,7 @@ import { initializeApp, firebase } from 'firebase/app';
 import { getDatabase, ref, set, get, push, child, update, remove } from "firebase/database";
 import { delay } from 'q';
 import { Text, Card, Button, Icon } from '@rneui/themed';
+import moment from 'moment';
 
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyCtSa-qK2xb-Wky_vszWWACyTqru9c9l94",
@@ -52,17 +53,31 @@ const joinedEvents = ({ navigation }) => {
 
                 let joinedArr = []
                 // console log for attended event keys
-                //console.log(Object.values(snapshot.val().joinedEvents))
+                console.log(Object.values(snapshot.val().attendedEvents))
                 // loop traversing through all attended event keys
                 for(let i = 1; i < Object.values(snapshot.val().attendedEvents).length; i++) {
                     //const dbref = ref(db);
+                    var date = moment().utcOffset('-5:00').format('MM/DD/YYYY HH:mm');
+
                     let eid = Object.values(snapshot.val().attendedEvents)[i]
 
                     
                     get(child(dbref, `Events/${eid}`))
                     .then((snapshot) => {
                         if(snapshot.exists()) {
+                            if (snapshot.val().endDate < date) {
+                                update(ref(db, "Events/" + eid), {
+                                    eventEnded: 1,
+                                  })
+                                  .then(() => {
+                                  })
+                                  .catch((error) => {
+                                    const errorMessage = error.message;
+                                    alert(errorMessage);
+                                  });          
+                              }
                           if (snapshot.val().eventEnded == 1) {
+                              console.log(JSON.stringify(snapshot.val()))
                               let info = snapshot.val()
                               joinedArr.push(info)
                               setEventsArr(joinedArr)
@@ -89,7 +104,7 @@ const joinedEvents = ({ navigation }) => {
                 get(child(dbref, `Events/${eid}`))
                 .then((snapshot) => {
                     if(snapshot.exists()) {
-                      if (snapshot.val().eventEnded == 1) {
+                        if (snapshot.val().eventEnded == 1) {
                         let info = snapshot.val()
                         joinedArr.push(info)
                         setEventsArr(joinedArr)
@@ -134,7 +149,7 @@ const joinedEvents = ({ navigation }) => {
                         // setAttendeesStr(JSON.stringify(attendeesDict))
                         // console.log(attendeesDict)
                         // console.log(attendeesStr)
-                      }
+                    }
                     } else {
                         console.log("snapshot doesnt exist")
                     }
@@ -155,10 +170,10 @@ const joinedEvents = ({ navigation }) => {
 
   return (       
     <ScrollView>{
-      //eventsArr.length !== 0 &&
+      eventsArr.length !== 0 &&
       eventsArr.map((element, index) => { return (
         <View>
-          <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
+          {<Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>}
           <Card containerStyle={{ marginTop: 15 }}>
             <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{eventsArr[index]?.name}</Card.Title>            
             <Card.Divider />                              

@@ -6,6 +6,7 @@ import { initializeApp, firebase } from 'firebase/app';
 import { getDatabase, ref, set, get, push, child, update, remove } from "firebase/database";
 import { delay } from 'q';
 import { Text, Card, Button, Icon } from '@rneui/themed';
+import moment from 'moment';
 
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyCtSa-qK2xb-Wky_vszWWACyTqru9c9l94",
@@ -21,8 +22,8 @@ const firebaseApp = initializeApp({
 const db = getDatabase(firebaseApp);
 
 const createdEvents = ({ navigation }) => {
-    // let content;
-    let [flag, setFlag] = useState("");
+    let content;
+    let [flag, setFlag] = useState("You have created no events");
     let [events, setEvents] = useState("None")
     let [eventsArr, setEventsArr] = useState([])
     let [eventStr, setEventStr] = useState(JSON.stringify(events))
@@ -41,16 +42,16 @@ const createdEvents = ({ navigation }) => {
         .then((snapshot)=> {
           if (snapshot.exists()) {
             if (Array.isArray(snapshot.val().createdEvents)) {
-                    setFlag("You have created no events");
-                    console.log(flag);
+                    // setFlag("You have created no events");
+                    // // console.log(flag);
             }
             // values of created event keys stored in state variable
             else {
                 setCreated(Object.values(snapshot.val().createdEvents))
-                if (created.length >= 2) {
-                    setFlag("You have created one or more events");
-                    console.log(flag);
-                }
+                // if (created.length >= 2) {
+                //     setFlag("You have created one or more events");
+                //     // console.log(flag);
+                // }
 
                 let createdArr = []
                 // console log for created event keys
@@ -60,19 +61,35 @@ const createdEvents = ({ navigation }) => {
                 console.log("CURREENT SNAP SHOT:" + JSON.stringify(snapshot.val()))
                 for(let i = 1; i < Object.values(snapshot.val().createdEvents).length; i++) {
                     //const dbref = ref(db);
+                    var date = moment().utcOffset('-5:00').format('MM/DD/YYYY HH:mm');
+
                     let eid = Object.values(snapshot.val().createdEvents)[i]
+
                     console.log("EIDDDDD:" + eid)
                     get(child(dbref, `Events/${eid}`))
                     .then((snapshot) => {
                         if(snapshot.exists()) {
+                          if (snapshot.val().endDate < date) {
+                            update(ref(db, "Events/" + eid), {
+                                eventEnded: 1,
+                              })
+                              .then(() => {
+                              })
+                              .catch((error) => {
+                                const errorMessage = error.message;
+                                alert(errorMessage);
+                              });          
+                          }
                           if (snapshot.val().eventEnded == 1) {
                             // console.log(JSON.stringify(snapshot.val()))
                             let info = snapshot.val()
                             createdArr.push(info)
                             setEventsArr(createdArr)
                             setEventStr(JSON.stringify(createdArr))
+                            setFlag("You have created one or more events");
                             //console.log(createdArr)
                           }
+                        //   setFlag("You have created one or more events");
                         } else {
                             console.log("snapshot doesnt exist")
                         }
