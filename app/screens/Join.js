@@ -47,13 +47,12 @@ export default function Join() {
     const uid = getAuth().currentUser.uid
     const path = `Events/${data}`
     
-      set(ref(db, `Users/${uid}`),{
+      update(ref(db, "Users/" + uid), {
         currentEventId: data,
         currentEventStartTime: 0,
       })
       .then(() => {
         alert("Data Stored Successfully!");
-        navigation.navigate("Dashboard");   
       })
       .catch((error) => {
         const errorMessage = error.message;
