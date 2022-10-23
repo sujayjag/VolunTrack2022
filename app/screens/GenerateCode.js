@@ -28,7 +28,7 @@ const GenerateCode = ({ route, navigation }) => {
               logo={require("../assets/logo.png")}
               logoBackgroundColor='white'
               logoSize={60}
-              size={100}
+              size={300}
               color={'#32174d'}
             />
 

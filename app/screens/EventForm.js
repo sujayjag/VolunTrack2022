@@ -67,7 +67,6 @@ const EventForm = ({ navigation }) => {
                   {eId: event.key}) 
             })
             .catch((error) => {
-              alert(error.message)
             })
 
            

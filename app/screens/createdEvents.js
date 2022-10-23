@@ -129,41 +129,40 @@ const createdEvents = ({ navigation }) => {
      });
     }, [])
 
-    return (       
-        <ScrollView>{
-          eventsArr.map((element, index) => { return (
-            <View>
-              <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
-              <Card containerStyle={{ marginTop: 15 }}>
-                <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{eventsArr[index]?.name}</Card.Title>            
-                <Card.Divider />                              
+    return (
+      <><Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text><ScrollView>{eventsArr.map((element, index) => {
+        return (
+          <View>
+            <Card containerStyle={{ marginTop: 15 }}>
+              <Card.Title style={{ fontSize: 20, textAlign: 'center' }}>{eventsArr[index]?.name}</Card.Title>
+              <Card.Divider />
 
-                <Text style={styles.fonts}>
-                    Description: {eventsArr[index]?.description}
-                </Text>
-                <Text style={styles.fonts}>
-                    Start Date & Time: {eventsArr[index]?.startDate.split(' ')[0]} at {eventsArr[index]?.startDate.split(' ')[1]}
-                </Text>
-                <Text style={styles.fonts}>
-                    End Date & Time: {eventsArr[index]?.endDate.split(' ')[0]} at {eventsArr[index]?.endDate.split(' ')[1]}
-                </Text>
-                <Text style={styles.fonts}>
-                    Location: ({eventsArr[index]?.latitude}, {eventsArr[index]?.longitude})
-                </Text>
-                <Text style={styles.fonts}>
-                    Number of Attendees: {Object.keys(eventsArr[index]?.attendedUsers).length - 1}
-                </Text>
-                <Text style={styles.fonts}>
-                    Contact Email: {eventsArr[index]?.contactEmail}
-                </Text>
-                <Text style={styles.fonts}>
-                    Contact Number: {eventsArr[index]?.contactNumber.substring(0, 3)}-{eventsArr[index]?.contactNumber.substring(3, 6)}-{eventsArr[index]?.contactNumber.substring(6, 10)}
-                </Text>
-            </Card> 
-            </View>
-            )})
-          }                                            
-        </ScrollView>
+              <Text style={styles.fonts}>
+                Description: {eventsArr[index]?.description}
+              </Text>
+              <Text style={styles.fonts}>
+                Start Date & Time: {eventsArr[index]?.startDate.split(' ')[0]} at {eventsArr[index]?.startDate.split(' ')[1]}
+              </Text>
+              <Text style={styles.fonts}>
+                End Date & Time: {eventsArr[index]?.endDate.split(' ')[0]} at {eventsArr[index]?.endDate.split(' ')[1]}
+              </Text>
+              <Text style={styles.fonts}>
+                Location: ({eventsArr[index]?.latitude}, {eventsArr[index]?.longitude})
+              </Text>
+              <Text style={styles.fonts}>
+                Number of Attendees: {Object.keys(eventsArr[index]?.attendedUsers).length - 1}
+              </Text>
+              <Text style={styles.fonts}>
+                Contact Email: {eventsArr[index]?.contactEmail}
+              </Text>
+              <Text style={styles.fonts}>
+                Contact Number: {eventsArr[index]?.contactNumber.substring(0, 3)}-{eventsArr[index]?.contactNumber.substring(3, 6)}-{eventsArr[index]?.contactNumber.substring(6, 10)}
+              </Text>
+            </Card>
+          </View>
+        );
+      })}
+      </ScrollView></>
     );
 };
 

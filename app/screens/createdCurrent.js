@@ -53,13 +53,10 @@ const createdEvents = ({ navigation }) => {
 
                 let createdArr = []
                 let tempEids = []
-                console.log(Object.values(snapshot.val().createdEvents))
-                console.log("CURREENT SNAP SHOT:" + JSON.stringify(snapshot.val()))
                 for(let i = 1; i < Object.values(snapshot.val().createdEvents).length; i++) {
                     var date = moment().utcOffset('-5:00').format('MM/DD/YYYY HH:mm');
 
                     let eid = Object.values(snapshot.val().createdEvents)[i]
-                    console.log("EIDDDDD:" + eid)
                     get(child(dbref, `Events/${eid}`))
                     .then((snapshot) => {
                         if(snapshot.exists()) {
@@ -138,60 +135,53 @@ const createdEvents = ({ navigation }) => {
     }, [])
 
     const handleClick = (eventObj) => {
-      console.log("clicked!")
       navigation.navigate('viewCurrentCreated', {eids: eventObj})
     }
-    console.log("EID ARR: " + eidArr.join())
-    console.log("EVENTS ARR: " + JSON.stringify(eventsArr))
     return (       
-        <ScrollView keyboardShouldPersistTaps={true} style={{ marginBottom: 10 }}>
-          {
-          eventsArr.map((element, index) => { return (
-            
-             
-                <View>
-                <Card containerStyle={{ marginTop: 15 }} >
-                  <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{eventsArr[index]?.name}</Card.Title>            
-                  <Card.Divider />                              
+        <><Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text><ScrollView keyboardShouldPersistTaps={true} style={{ marginBottom: 10 }}>
+        {eventsArr.map((element, index) => {
+          return (
+            <View>
+              <Card containerStyle={{ marginTop: 15 }}>
+                <Card.Title style={{ fontSize: 20, textAlign: 'center' }}>{eventsArr[index]?.name}</Card.Title>
+                <Card.Divider />
 
-                  <Text style={styles.fonts}>
-                      Description: {eventsArr[index]?.description}
-                  </Text>
-                  <Text style={styles.fonts}>
-                      Start Date & Time: {eventsArr[index]?.startDate.split(' ')[0]} at {eventsArr[index]?.startDate.split(' ')[1]}
-                  </Text>
-                  <Text style={styles.fonts}>
-                      End Date & Time: {eventsArr[index]?.endDate.split(' ')[0]} at {eventsArr[index]?.endDate.split(' ')[1]}
-                  </Text>
-                  <Text style={styles.fonts}>
-                      Location: ({eventsArr[index]?.latitude}, {eventsArr[index]?.longitude})
-                  </Text>
-                  <Text style={styles.fonts}>
-                      Number of Attendees: {Object.keys(eventsArr[index]?.attendedUsers).length - 1}
-                  </Text>
-                  <Text style={styles.fonts}>
-                      Contact Email: {eventsArr[index]?.contactEmail}
-                  </Text>
-                  <Text style={styles.fonts}>
-                      Contact Number: {eventsArr[index]?.contactNumber.substring(0, 3)}-{eventsArr[index]?.contactNumber.substring(3, 6)}-{eventsArr[index]?.contactNumber.substring(6, 10)}
-                  </Text>
+                <Text style={styles.fonts}>
+                  Description: {eventsArr[index]?.description}
+                </Text>
+                <Text style={styles.fonts}>
+                  Start Date & Time: {eventsArr[index]?.startDate.split(' ')[0]} at {eventsArr[index]?.startDate.split(' ')[1]}
+                </Text>
+                <Text style={styles.fonts}>
+                  End Date & Time: {eventsArr[index]?.endDate.split(' ')[0]} at {eventsArr[index]?.endDate.split(' ')[1]}
+                </Text>
+                <Text style={styles.fonts}>
+                  Location: ({eventsArr[index]?.latitude}, {eventsArr[index]?.longitude})
+                </Text>
+                <Text style={styles.fonts}>
+                  Number of Attendees: {Object.keys(eventsArr[index]?.attendedUsers).length - 1}
+                </Text>
+                <Text style={styles.fonts}>
+                  Contact Email: {eventsArr[index]?.contactEmail}
+                </Text>
+                <Text style={styles.fonts}>
+                  Contact Number: {eventsArr[index]?.contactNumber.substring(0, 3)}-{eventsArr[index]?.contactNumber.substring(3, 6)}-{eventsArr[index]?.contactNumber.substring(6, 10)}
+                </Text>
 
-                  <QRCode
-                    value={eidArr[index]}
-                    logo={require("../assets/logo.png")}
-                    logoBackgroundColor='white'
-                    logoSize={60}
-                    size={300}
-                    color={'#32174d'}
+                <QRCode
+                  value={eidArr[index]}
+                  logo={require("../assets/logo.png")}
+                  logoBackgroundColor='white'
+                  logoSize={60}
+                  size={300}
+                  color={'#32174d'} />
 
-                  />
-                  
               </Card>
-              </View>            
-            
-            )})
-          }                                            
-        </ScrollView>
+            </View>
+
+          );
+        })}
+      </ScrollView></>
     );
 };
 

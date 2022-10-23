@@ -58,36 +58,34 @@ const joinedEvents = ({ navigation }) => {
     }, [])
 
   if(Object.keys(event).length !== 0) {
-    return (               
-        <View>
-          <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
-           
-            <Card containerStyle={{ marginTop: 15 }}>
-              <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{event.name}</Card.Title>            
-              <Card.Divider />                              
+    return (   
+      <><Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text><View>
+        <Card containerStyle={{ marginTop: 15 }}>
+          <Card.Title style={{ fontSize: 20, textAlign: 'center' }}>{event.name}</Card.Title>
+          <Card.Divider />
 
-              <Text style={styles.fonts}>
-                  Description: {event.description}
-              </Text>
-              <Text style={styles.fonts}>
-                  Start Date & Time: {event.startDate?.split(' ')[0]} at {event.startDate?.split(' ')[1]}
-              </Text>
-              <Text style={styles.fonts}>
-                  End Date & Time: {event.endDate?.split(' ')[0]} at {event.endDate?.split(' ')[1]}
-              </Text>
-              <Text style={styles.fonts}>
-                  Location: ({event.latitude}, {event.longitude})
-              </Text>
-              <Text style={styles.fonts}>
-                  Contact Email: {event.contactEmail}
-              </Text>
-              <Text style={styles.fonts}>
-                  Contact Number: {event.contactNumber?.substring(0, 3)}-{event.contactNumber?.substring(3, 6)}-{event.contactNumber?.substring(6, 10)}
-              </Text>
-          </Card>
-          
-           
-        </View>
+          <Text style={styles.fonts}>
+            Description: {event.description}
+          </Text>
+          <Text style={styles.fonts}>
+            Start Date & Time: {event.startDate?.split(' ')[0]} at {event.startDate?.split(' ')[1]}
+          </Text>
+          <Text style={styles.fonts}>
+            End Date & Time: {event.endDate?.split(' ')[0]} at {event.endDate?.split(' ')[1]}
+          </Text>
+          <Text style={styles.fonts}>
+            Location: ({event.latitude}, {event.longitude})
+          </Text>
+          <Text style={styles.fonts}>
+            Contact Email: {event.contactEmail}
+          </Text>
+          <Text style={styles.fonts}>
+            Contact Number: {event.contactNumber?.substring(0, 3)}-{event.contactNumber?.substring(3, 6)}-{event.contactNumber?.substring(6, 10)}
+          </Text>
+        </Card>
+
+
+      </View></>
                                                         
    );
   } else {

@@ -71,24 +71,27 @@ export default class screens extends Component {
           let locArr = []
 
           for(let i = 0; i < Object.keys(this.state.events).length; i++) {
-            let curEvent = Object.keys(this.state.events)[i]
-            //grab info from event directly
-            let element = {
-              eventId: curEvent,
-              coordinate: {                
-                latitude: snapshot.val()[Object.keys(this.state.events)[i]]['latitude'],
-                longitude: snapshot.val()[Object.keys(this.state.events)[i]]['longitude']
-              },
-              title: snapshot.val()[Object.keys(this.state.events)[i]]['name'],
-              description: snapshot.val()[Object.keys(this.state.events)[i]]['description'],
-              start: snapshot.val()[Object.keys(this.state.events)[i]]['startDate'],
-              end: snapshot.val()[Object.keys(this.state.events)[i]]['endDate'],
-              email: snapshot.val()[Object.keys(this.state.events)[i]]['contactEmail'],
-              number: snapshot.val()[Object.keys(this.state.events)[i]]['contactNumber'],
-              //image: Pic
+            if (snapshot.val()[Object.keys(this.state.events)[i]]['eventEnded'] == 0) {
+              let element = {
+                eventId: Object.keys(this.state.events)[i],
+                coordinate: {                
+                  latitude: snapshot.val()[Object.keys(this.state.events)[i]]['latitude'],
+                  longitude: snapshot.val()[Object.keys(this.state.events)[i]]['longitude']
+                },
+                title: snapshot.val()[Object.keys(this.state.events)[i]]['name'],
+                description: snapshot.val()[Object.keys(this.state.events)[i]]['description'],
+                start: snapshot.val()[Object.keys(this.state.events)[i]]['startDate'],
+                end: snapshot.val()[Object.keys(this.state.events)[i]]['endDate'],
+                email: snapshot.val()[Object.keys(this.state.events)[i]]['contactEmail'],
+                number: snapshot.val()[Object.keys(this.state.events)[i]]['contactNumber'],
+                //image: Pic
+              }
+
+              locArr.push(element)
             }
             
-            locArr.push(element)
+            
+            
           }
           this.setState({
             markers: locArr
