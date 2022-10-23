@@ -5,15 +5,17 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, addDoc, collection, getFirestore } from "firebase/firestore";
 import { initializeApp, firebase } from 'firebase/app';
 import { getDatabase, ref, set, child, update, remove, get, push } from "firebase/database";
+import moment from 'moment';
 //import { createStackNavigator, createAppContainer } from 'react-navigation';  
 
 export default function Join() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [text, setText] = useState('Not yet scanned')
+  const [text, setText] = useState('')
   const [x, setX] = useState(false)
-  const [buttonText, setButtonText] = useState("Successfully Signed In!\nTap to Scan Out.")
+  const [buttonText, setButtonText] = useState("Tap to sign in.")
   const [buttonColor, setButtonColor] = useState("green")
+  const [checkedIn, setCheckedIn] = useState(false)
 
   const askForCameraPermission = () => {
     (async () => {
@@ -46,25 +48,67 @@ export default function Join() {
     const db = getDatabase(firebaseApp);
     const uid = getAuth().currentUser.uid
     const path = `Events/${data}`
+
+    var date = moment()
+      .utcOffset('-5:00')
+      .format('MM/DD/YYYY HH:mm');
+      //const oldCheck = checkedIn;
+      //setCheckedIn(!oldCheck)
+      if (checkedIn) {
+        update(ref(db, "Users/" + uid), {
+          
+          currentEventId: 0,          
+          currentEventEndTime: date
+        })
+        .then(() => {
+          setButtonColor('red')
+          setText('Successfully Checked Out!\nTap to scan into a new event')
+          alert("Data Stored Successfully!");
+          setCheckedIn(false)
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          alert(errorMessage);
+        });          
+      }
+      else {
+        update(ref(db, "Users/" + uid), {
+          currentEventId: data,
+          currentEventStartTime: date,
+          currentEventEndTime: 0
+        })
+        .then(() => {
+          setButtonColor('green')
+          setText('Successfully Checked In!\nTap to scan to check out')
+          alert("Data Stored Successfully!");
+          setCheckedIn(true)
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          alert(errorMessage);
+        });          
+      }
+    
     get(child(ref(db), path))
       .then((snapshot) => {
         if(snapshot.exists()) {
           // alert('yay')
           // alert(typeof(data))
-          newPath = `Users/${uid}/attendedEvents`
+
+          let newPath = `Users/${uid}/attendedEvents` 
           push(ref(db, newPath), data)
             .then((event) => {
               //alert("Lit")
              push(ref(db, path + "/attendedUsers/"), uid)
-              .then((event) => alert("Lit"))
+              //.then((event) => alert("Lit"))
               .catch((error) => alert(error.message))
             })
             .catch((error) => {alert(error.message)})
         } else {
-          alert("hello")
+          alert("error with users")
         }
       })
-      .catch((error) => {alert(error.message)})
+      .catch((error) => {})
   };
 
   // Check permissions and return the screens
@@ -110,8 +154,8 @@ export default function Join() {
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
           style={{ height: 400, width: 400 }} />
       </View>
-      <Text style={styles.maintext}>{text}</Text>
-      {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+      {/* <Text style={styles.maintext}>{text}</Text> */}
+      <Button title={text} color={buttonColor} onPress={() => setScanned(false)} />
       
 
     </View>
