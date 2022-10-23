@@ -52,17 +52,18 @@ const createdEvents = ({ navigation }) => {
 
                 let createdArr = []
                 // console log for created event keys
-                console.log("snapshot:" + JSON.stringify(snapshot.val()))
+                //console.log("snapshot:" + JSON.stringify(snapshot.val()))
                 //console.log(Object.values(snapshot.val().createdEvents))
                 // loop traversing through all created event keys
-                console.log(Object.values(snapshot.val().createdEvents))
+                console.log("CURREENT SNAP SHOT:" + JSON.stringify(snapshot.val()))
                 for(let i = 1; i < Object.values(snapshot.val().createdEvents).length; i++) {
                     //const dbref = ref(db);
                     let eid = Object.values(snapshot.val().createdEvents)[i]
-                    
+                    console.log("EIDDDDD:" + eid)
                     get(child(dbref, `Events/${eid}`))
                     .then((snapshot) => {
                         if(snapshot.exists()) {
+                            console.log(JSON.stringify(snapshot.val()))
                             let info = snapshot.val()
                             createdArr.push(info)
                             setEventsArr(createdArr)
@@ -92,7 +93,7 @@ const createdEvents = ({ navigation }) => {
                           createdArr.push(info)
                           setEventsArr(createdArr)
                           setEventStr(JSON.stringify(createdArr))
-                          console.log(snapshot.val().attendedUsers)
+                          console.log(snapshot.val())
 
                           let attendeesArr = Object.values(snapshot.val().attendedUsers)
                           let attendeesData = []
@@ -102,6 +103,7 @@ const createdEvents = ({ navigation }) => {
                             get(child(dbref, `Users/${cur}`))
                               .then((snapshot) => {
                                 if(snapshot.exists()) {
+                                  //console.log('SNAPSHOT of EVENT' + snapshot.val())
                                   let curData = {
                                     uid: cur,
                                     firstName: snapshot.val().firstName,
@@ -115,6 +117,7 @@ const createdEvents = ({ navigation }) => {
                                   attendeesDict[eid] = attendeesData
                                   setAttendees(attendeesDict)
                                   setAttendeesStr(JSON.stringify(attendeesDict))
+                                  console.log("ATTENDEES DICT:" + JSON.stringify(attendeesDict))
                                   //setAttendees(attendeesDict)
                                   //setAttendeesStr(JSON.stringify(attendeesDict))
                                   //console.log(attendeesDict)
@@ -148,7 +151,7 @@ const createdEvents = ({ navigation }) => {
      });
     }, [])
 
-    console.log('eventsArr:' + eventsArr)
+    //console.log('eventsArr:' + eventsArr)
     // console.log(eventsArr[0])
     // eventsArr.map((element) => {
     //   console.log(element)
