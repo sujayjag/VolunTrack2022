@@ -150,38 +150,40 @@ const createdEvents = ({ navigation }) => {
      });
     }, [])
 
-    return (  
-        <View>
-            <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
+    return ( 
+      <View>
+      {eventsArr.length !== 0 &&
+      <View>
+      <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
 
-            <Text style={{ fontSize: 24, color: 'red' }}>Event info: {eventStr}</Text>
-
-            <Text style={{ fontSize: 24, color: 'orange' }}>Event info: {attendeesStr}</Text>
-            {/* <Text style={{ fontSize: 24, color: 'red' }}>Event info: {eventStr}</Text> */}
-            
-            <Card containerStyle={{ marginTop: 15 }}>
-                <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{eventsArr[0]['name']}</Card.Title>            
-                <Card.Divider />
-                <Text style={styles.fonts}>
-                    Description: {eventsArr[0]['description']}
-                </Text>
-                <Text style={styles.fonts}>
-                    Start Date & Time: {eventsArr[0]['startDate'].split(' ')[0]} at {eventsArr[0]['startDate'].split(' ')[1]}
-                </Text>
-                <Text style={styles.fonts}>
-                    End Date & Time: {eventsArr[0]['endDate'].split(' ')[0]} at {eventsArr[0]['endDate'].split(' ')[1]}
-                </Text>
-                <Text style={styles.fonts}>
-                    Location: ({eventsArr[0]['latitude']}, {eventsArr[0]['longitude']})
-                </Text>
-                <Text style={styles.fonts}>
-                    Contact Email: {eventsArr[0]['contactEmail']}
-                </Text>
-                <Text style={styles.fonts}>
-                    Contact Number: {eventsArr[0]['contactNumber'].substring(0, 3)}-{eventsArr[0]['contactNumber'].substring(3, 6)}-{eventsArr[0]['contactNumber'].substring(6, 10)}
-                </Text>
-            </Card>
-        </View>
+      <Text style={{ fontSize: 24, color: 'orange' }}>Event info: {attendeesStr}</Text>
+      {/* <Text style={{ fontSize: 24, color: 'red' }}>Event info: {eventStr}</Text> */}
+      
+      <Card containerStyle={{ marginTop: 15 }}>
+          <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{eventsArr[0]['name']}</Card.Title>            
+          <Card.Divider />
+          <Text style={styles.fonts}>
+              Description: {eventsArr[0]['description']}
+          </Text>
+          <Text style={styles.fonts}>
+              Start Date & Time: {eventsArr[0]['startDate'].split(' ')[0]} at {eventsArr[0]['startDate'].split(' ')[1]}
+          </Text>
+          <Text style={styles.fonts}>
+              End Date & Time: {eventsArr[0]['endDate'].split(' ')[0]} at {eventsArr[0]['endDate'].split(' ')[1]}
+          </Text>
+          <Text style={styles.fonts}>
+              Location: ({eventsArr[0]['latitude']}, {eventsArr[0]['longitude']})
+          </Text>
+          <Text style={styles.fonts}>
+              Contact Email: {eventsArr[0]['contactEmail']}
+          </Text>
+          <Text style={styles.fonts}>
+              Contact Number: {eventsArr[0]['contactNumber'].substring(0, 3)}-{eventsArr[0]['contactNumber'].substring(3, 6)}-{eventsArr[0]['contactNumber'].substring(6, 10)}
+          </Text>
+      </Card>
+      </View>
+      }
+      </View>
     );
 };
 
