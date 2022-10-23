@@ -43,20 +43,19 @@ const joinedEvents = ({ navigation }) => {
             else {
                 setJoined(Object.values(snapshot.val().attendedEvents))
                 if (joined.length == 2) {
-                    setFlag("You have attended an event and one is ongoing");
+                    setFlag("You have attended an event");
                 }
                 else if (joined.length == 3) {
                     setFlag("You have attended an event and one is ongoing");
                 } 
                 else {
-                    setFlag("You have attended some event and one is ongoing");
+                    setFlag("You have attended some events and one is ongoing");
                 }
 
                 let joinedArr = []
                 // console log for attended event keys
                 console.log(Object.values(snapshot.val().attendedEvents))
                 // loop traversing through all attended event keys
-                let toggle = false;
                 for(let i = 1; i < Object.values(snapshot.val().attendedEvents).length; i++) {
                     //const dbref = ref(db);
                     let eid = Object.values(snapshot.val().attendedEvents)[i]
@@ -66,19 +65,12 @@ const joinedEvents = ({ navigation }) => {
                     .then((snapshot) => {
                         if(snapshot.exists) {
                           if (snapshot.val().eventEnded == 1) {
+                              console.log(JSON.stringify(snapshot.val()))
                               let info = snapshot.val()
                               joinedArr.push(info)
                               setEventsArr(joinedArr)
                               setEventStr(JSON.stringify(joinedArr))
-                              console.log(joinedArr)
-                              let toggle = true;
-                              console.log(Object.keys(joinedArr).length);
-                              if ((Object.keys(joinedArr).length) == 1 && toggle) {
-                                setFlag("You have attended an event");
-                              }
-                              if ((Object.keys(joinedArr).length) > 1 && toggle) {
-                                setFlag("You have attended some events");
-                              }
+                              //console.log(joinedArr)
                           }
                         } else {
                             console.log("snapshot doesnt exist")

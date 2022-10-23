@@ -47,13 +47,13 @@ const db = getDatabase(firebaseApp);
         lastName: lname,
         phoneNumber: phone,
         currentEventId: 0,
-        currrentEventStartTime: 0,
+        currentEventStartTime: 0,
         currentEventEndTime: 0,
         createdEvents: [0],
         attendedEvents:  [0],
       })
       .then(() => {
-        alert("Data Stored Successfully!");
+        //alert("Data Stored Successfully!");
         navigation.navigate("Dashboard");   
       })
       .catch((error) => {

@@ -49,6 +49,9 @@ const createdEvents = ({ navigation }) => {
                 if (created.length == 2) {
                     setFlag("You have created an event");
                 }
+                else if (created.length == 3) {
+                    setFlag("You have created an event and one is ongoing/upcoming");
+                } 
                 else {
                     setFlag("You have created multiple events");
                 }
