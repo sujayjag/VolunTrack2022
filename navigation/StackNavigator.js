@@ -13,6 +13,9 @@ import pastEvents from "../app/screens/pastEvents.js";
 import createdEvents from "../app/screens/createdEvents.js";
 import joinedEvents from "../app/screens/joinedEvents.js";
 import currentEvents from "../app/screens/currentEvents.js";
+import joinedCurrent from "../app/screens/joinedCurrent.js";
+import createdCurrent from "../app/screens/createdCurrent.js";
+import viewCurrentCreated from "../app/screens/viewCurrentCreated.js";
 import Success from "../app/screens/Success.js";
 import Join from "../app/screens/Join.js";
 import GenerateCode from "../app/screens/GenerateCode.js";
@@ -41,9 +44,12 @@ const MainStackNavigator = () => {
       <Stack.Screen name="createdEvents" component={createdEvents} options={{ title: 'Created Events' }}/>
       <Stack.Screen name="joinedEvents" component={joinedEvents} options={{ title: 'Joined Events' }}/>
       <Stack.Screen name="currentEvents" component={currentEvents} options={{ title: 'Current Events' }}/>
+      <Stack.Screen name="createdCurrent" component={createdCurrent} options={{ title: 'Created Events' }}/>
+      <Stack.Screen name="joinedCurrent" component={joinedCurrent} options={{ title: 'Joined Events' }}/>
       <Stack.Screen name="Success" component={Success} />
       <Stack.Screen name="Join" component={Join} />
       <Stack.Screen name="GenerateCode" component={GenerateCode} />
+      <Stack.Screen name="viewCurrentCreated" component={viewCurrentCreated} />
       <Stack.Screen name="Hub" component={Hub} />
     </Stack.Navigator>
   );
