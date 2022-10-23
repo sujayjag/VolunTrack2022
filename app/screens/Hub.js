@@ -72,7 +72,6 @@ export default class screens extends Component {
 
           for(let i = 0; i < Object.keys(this.state.events).length; i++) {
             let curEvent = Object.keys(this.state.events)[i]
-            //console.log(curEvent)
             //grab info from event directly
             let element = {
               eventId: curEvent,
@@ -94,11 +93,6 @@ export default class screens extends Component {
           this.setState({
             markers: locArr
           })
-          //console.log(this.state.events)
-          console.log(this.state.eventKeys)
-          console.log(this.state.markers)
-        } else {
-          console.log("snapshot doesn't exist.")
         }
       })
       .catch((error) => alert(error.message))
@@ -216,11 +210,6 @@ export default class screens extends Component {
         >
           {this.state.markers.map((marker, index) => (
             <View style={styles.card} key={index}>
-              {/* <Image
-                source={marker.image}
-                style={styles.cardImage}
-                resizeMode="cover"
-              /> */}
               <View style={styles.textContent}>
                 <Text numberOfLines={2} style={styles.cardtitle}>{marker.title}</Text>
                 <Text numberOfLines={5} style={styles.cardDescription}>{marker.description}</Text>
@@ -243,7 +232,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     position: "absolute",
-    bottom: 70,
+    bottom: 50,
     left: 0,
     right: 0,
     paddingVertical: 10,

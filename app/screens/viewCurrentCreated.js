@@ -3,10 +3,8 @@ import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, Image, Button, Pressable, TextInput, TouchableOpacity} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
-const GenerateCode = ({ route, navigation }) => {
-    const { eId } = route.params;
-    const eventId = JSON.stringify(eId).slice(1,-1);
-
+const viewCurrentCreated = ({ route, navigation }) => {
+    const event = route.params;    
 
     return (
         <View style={styles.cont}>
@@ -22,23 +20,34 @@ const GenerateCode = ({ route, navigation }) => {
             <View style={{justifyContent: 'space-between'}}>
                 <Text style={styles.titleText}></Text>
             </View>
+            <Text>Code: {"0"}</Text>
 
             <QRCode
-              value={eventId}
+              value={"0"}
               logo={require("../assets/logo.png")}
               logoBackgroundColor='white'
-              logoSize={60}
-              size={100}
-              color={'#32174d'}
+              logoSize={80}
+              size={300}
+              color={'#CF9FFF'}
+              
+              // enableLinearGradient={true}
+              // linearGradient={['#f7ff00','#db36a4']}
+              // gradientDirection={[0,45,44,0]}
             />
 
             <View style={styles.container}>
-                <TouchableOpacity style={styles.saveButton} onPress={() => navigation.navigate("createdCurrent")}>
+                <TouchableOpacity style={styles.saveButton} onPress={() => navigation.navigate("Dashboard")}>
                     <Text style={styles.saveText}>Save</Text>
                 </TouchableOpacity>
                 <View style={{justifyContent: 'space-between'}}>
                     <Text style={styles.titleText}></Text>
                 </View>
+                <View style={{justifyContent: 'space-between'}}>
+                    <Text style={styles.titleText}></Text>
+                </View>
+                <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate("Dashboard")}>
+                    <Text style={styles.shareText}>Share</Text>
+                </TouchableOpacity>
                 <View style={{justifyContent: 'space-between'}}>
                     <Text style={styles.titleText}></Text>
                 </View>
@@ -126,4 +135,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default GenerateCode;
+export default viewCurrentCreated;

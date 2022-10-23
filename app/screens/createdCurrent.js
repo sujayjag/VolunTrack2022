@@ -6,6 +6,7 @@ import { initializeApp, firebase } from 'firebase/app';
 import { getDatabase, ref, set, get, push, child, update, remove } from "firebase/database";
 import { delay } from 'q';
 import { Text, Card, Button, Icon } from '@rneui/themed';
+import QRCode from 'react-native-qrcode-svg';
 import moment from 'moment';
 
 const firebaseApp = initializeApp({
@@ -22,14 +23,14 @@ const firebaseApp = initializeApp({
 const db = getDatabase(firebaseApp);
 
 const createdEvents = ({ navigation }) => {
-    let content;
-    let [flag, setFlag] = useState("You have created no events");
+    let [flag, setFlag] = useState("");
     let [events, setEvents] = useState("None")
     let [eventsArr, setEventsArr] = useState([])
     let [eventStr, setEventStr] = useState(JSON.stringify(events))
     let [created, setCreated] = useState([])
     let [attendees, setAttendees] = useState({})
     let [attendeesStr, setAttendeesStr] = useState(JSON.stringify(attendees))
+    let [eidArr, setEidArr] = useState([])
 
     const dbref = ref(db);
 
@@ -42,17 +43,23 @@ const createdEvents = ({ navigation }) => {
         .then((snapshot)=> {
           if (snapshot.exists()) {
             if (Array.isArray(snapshot.val().createdEvents)) {
+                    setFlag("You have created no events");
             }
             else {
                 setCreated(Object.values(snapshot.val().createdEvents))
+                if (created.length >= 2) {
+                    setFlag("You have created one or more events");
+                }
 
                 let createdArr = []
-                // loop traversing through all created event keys
+                let tempEids = []
+                console.log(Object.values(snapshot.val().createdEvents))
+                console.log("CURREENT SNAP SHOT:" + JSON.stringify(snapshot.val()))
                 for(let i = 1; i < Object.values(snapshot.val().createdEvents).length; i++) {
                     var date = moment().utcOffset('-5:00').format('MM/DD/YYYY HH:mm');
 
                     let eid = Object.values(snapshot.val().createdEvents)[i]
-
+                    console.log("EIDDDDD:" + eid)
                     get(child(dbref, `Events/${eid}`))
                     .then((snapshot) => {
                         if(snapshot.exists()) {
@@ -67,12 +74,14 @@ const createdEvents = ({ navigation }) => {
                                 alert(errorMessage);
                               });          
                           }
-                          if (snapshot.val().eventEnded == 1) {
+                          if (snapshot.val().eventEnded == 0) {
                             let info = snapshot.val()
                             createdArr.push(info)
+                            tempEids.push(eid)
+                            setEidArr(tempEids)
+                            
                             setEventsArr(createdArr)
                             setEventStr(JSON.stringify(createdArr))
-                            setFlag("You have created one or more events");
                           }
                         }
                     })
@@ -81,14 +90,13 @@ const createdEvents = ({ navigation }) => {
             }
               let createdArr = []
               let attendeesDict = {}
-              // loop traversing through all created event keys
               for(let i = 1; i < Object.values(snapshot.val().createdEvents).length; i++) {
                   let eid = Object.values(snapshot.val().createdEvents)[i]
                   
                   get(child(dbref, `Events/${eid}`))
                   .then((snapshot) => {
                       if(snapshot.exists()) {
-                        if (snapshot.val().eventEnded == 1) {
+                        if (snapshot.val().eventEnded == 0) {
                           let info = snapshot.val()
                           createdArr.push(info)
                           setEventsArr(createdArr)
@@ -114,7 +122,7 @@ const createdEvents = ({ navigation }) => {
                                   attendeesDict[eid] = attendeesData
                                   setAttendees(attendeesDict)
                                   setAttendeesStr(JSON.stringify(attendeesDict))
-                                } 
+                                }
                               })
                               .catch((error) => alert(error.message))
                           }
@@ -129,41 +137,61 @@ const createdEvents = ({ navigation }) => {
      });
     }, [])
 
+    const handleClick = (eventObj) => {
+      console.log("clicked!")
+      navigation.navigate('viewCurrentCreated', {eids: eventObj})
+    }
+    console.log("EID ARR: " + eidArr.join())
+    console.log("EVENTS ARR: " + JSON.stringify(eventsArr))
     return (       
-        <ScrollView>{
+        <ScrollView keyboardShouldPersistTaps={true} style={{ marginBottom: 10 }}>
+          {
           eventsArr.map((element, index) => { return (
-            <View>
-              <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
-              <Card containerStyle={{ marginTop: 15 }}>
-                <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{eventsArr[index]?.name}</Card.Title>            
-                <Card.Divider />                              
+            
+             
+                <View>
+                <Card containerStyle={{ marginTop: 15 }} >
+                  <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{eventsArr[index]?.name}</Card.Title>            
+                  <Card.Divider />                              
 
-              <Text style={styles.fonts}>
-                Description: {eventsArr[index]?.description}
-              </Text>
-              <Text style={styles.fonts}>
-                Start Date & Time: {eventsArr[index]?.startDate.split(' ')[0]} at {eventsArr[index]?.startDate.split(' ')[1]}
-              </Text>
-              <Text style={styles.fonts}>
-                End Date & Time: {eventsArr[index]?.endDate.split(' ')[0]} at {eventsArr[index]?.endDate.split(' ')[1]}
-              </Text>
-              <Text style={styles.fonts}>
-                Location: ({eventsArr[index]?.latitude}, {eventsArr[index]?.longitude})
-              </Text>
-              <Text style={styles.fonts}>
-                Number of Attendees: {Object.keys(eventsArr[index]?.attendedUsers).length - 1}
-              </Text>
-              <Text style={styles.fonts}>
-                Contact Email: {eventsArr[index]?.contactEmail}
-              </Text>
-              <Text style={styles.fonts}>
-                Contact Number: {eventsArr[index]?.contactNumber.substring(0, 3)}-{eventsArr[index]?.contactNumber.substring(3, 6)}-{eventsArr[index]?.contactNumber.substring(6, 10)}
-              </Text>
-            </Card>
-          </View>
-        );
-      })}
-      </ScrollView></>
+                  <Text style={styles.fonts}>
+                      Description: {eventsArr[index]?.description}
+                  </Text>
+                  <Text style={styles.fonts}>
+                      Start Date & Time: {eventsArr[index]?.startDate.split(' ')[0]} at {eventsArr[index]?.startDate.split(' ')[1]}
+                  </Text>
+                  <Text style={styles.fonts}>
+                      End Date & Time: {eventsArr[index]?.endDate.split(' ')[0]} at {eventsArr[index]?.endDate.split(' ')[1]}
+                  </Text>
+                  <Text style={styles.fonts}>
+                      Location: ({eventsArr[index]?.latitude}, {eventsArr[index]?.longitude})
+                  </Text>
+                  <Text style={styles.fonts}>
+                      Number of Attendees: {Object.keys(eventsArr[index]?.attendedUsers).length - 1}
+                  </Text>
+                  <Text style={styles.fonts}>
+                      Contact Email: {eventsArr[index]?.contactEmail}
+                  </Text>
+                  <Text style={styles.fonts}>
+                      Contact Number: {eventsArr[index]?.contactNumber.substring(0, 3)}-{eventsArr[index]?.contactNumber.substring(3, 6)}-{eventsArr[index]?.contactNumber.substring(6, 10)}
+                  </Text>
+
+                  <QRCode
+                    value={eidArr[index]}
+                    logo={require("../assets/logo.png")}
+                    logoBackgroundColor='white'
+                    logoSize={60}
+                    size={300}
+                    color={'#32174d'}
+
+                  />
+                  
+              </Card>
+              </View>            
+            
+            )})
+          }                                            
+        </ScrollView>
     );
 };
 
