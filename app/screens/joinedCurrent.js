@@ -62,14 +62,13 @@ const joinedEvents = ({ navigation }) => {
     }, [])
 
   //console.log('eventsArr:' + eventsArr)
-
-  return (       
-    
-      //eventsArr.length !== 0 &&
-      
+  console.log(Object.keys(event).length)
+  if(Object.keys(event).length !== 0) {
+    return (           
+      //eventsArr.length !== 0 &&        
         <View>
           <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
-          {event !== {} && 
+           
             <Card containerStyle={{ marginTop: 15 }}>
               <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{event.name}</Card.Title>            
               <Card.Divider />                              
@@ -87,20 +86,26 @@ const joinedEvents = ({ navigation }) => {
                   Location: ({event.latitude}, {event.longitude})
               </Text>
               <Text style={styles.fonts}>
-                  Number of Attendees: {Object.keys(event.attendedUsers).length - 1}
-              </Text>
-              <Text style={styles.fonts}>
                   Contact Email: {event.contactEmail}
               </Text>
               <Text style={styles.fonts}>
-                  Contact Number: {event.contactNumber.substring(0, 3)}-{event.contactNumber.substring(3, 6)}-{event.contactNumber.substring(6, 10)}
+                  Contact Number: {event.contactNumber?.substring(0, 3)}-{event.contactNumber?.substring(3, 6)}-{event.contactNumber?.substring(6, 10)}
               </Text>
           </Card>
-          }
+          
            
         </View>
                                                         
-  );
+   );
+  } else {
+    return (           
+      //eventsArr.length !== 0 &&        
+        <View>
+          <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
+        </View>
+    )
+  }
+  
 };
 
 const styles = StyleSheet.create({

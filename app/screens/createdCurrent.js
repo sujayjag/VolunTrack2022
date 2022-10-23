@@ -6,6 +6,7 @@ import { initializeApp, firebase } from 'firebase/app';
 import { getDatabase, ref, set, get, push, child, update, remove } from "firebase/database";
 import { delay } from 'q';
 import { Text, Card, Button, Icon } from '@rneui/themed';
+import QRCode from 'react-native-qrcode-svg';
 
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyCtSa-qK2xb-Wky_vszWWACyTqru9c9l94",
@@ -29,6 +30,7 @@ const createdEvents = ({ navigation }) => {
     let [created, setCreated] = useState([])
     let [attendees, setAttendees] = useState({})
     let [attendeesStr, setAttendeesStr] = useState(JSON.stringify(attendees))
+    let [eidArr, setEidArr] = useState([])
 
     const dbref = ref(db);
 
@@ -53,6 +55,7 @@ const createdEvents = ({ navigation }) => {
                 }
 
                 let createdArr = []
+                let tempEids = []
                 // console log for created event keys
                 //console.log("snapshot:" + JSON.stringify(snapshot.val()))
                 console.log(Object.values(snapshot.val().createdEvents))
@@ -69,6 +72,9 @@ const createdEvents = ({ navigation }) => {
                             // console.log(JSON.stringify(snapshot.val()))
                             let info = snapshot.val()
                             createdArr.push(info)
+                            tempEids.push(eid)
+                            setEidArr(tempEids)
+                            
                             setEventsArr(createdArr)
                             setEventStr(JSON.stringify(createdArr))
                             //console.log(createdArr)
@@ -161,38 +167,63 @@ const createdEvents = ({ navigation }) => {
     // eventsArr.map((element) => {
     //   console.log(element)
     // })
+    const handleClick = (eventObj) => {
+      console.log("clicked!")
+      navigation.navigate('viewCurrentCreated', {eids: eventObj})
+    }
+    console.log("EID ARR: " + eidArr.join())
+    console.log("EVENTS ARR: " + JSON.stringify(eventsArr))
     return (       
-        <ScrollView>{
+      //<Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
+      //key={eidArr[index]} 
+        <ScrollView keyboardShouldPersistTaps={true} style={{ marginBottom: 10 }}>
+          {
           eventsArr.map((element, index) => { return (
-            <View>
-              <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
-              <Card containerStyle={{ marginTop: 15 }}>
-                <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{eventsArr[index]?.name}</Card.Title>            
-                <Card.Divider />                              
+            
+             
+                <View>
+                <Card containerStyle={{ marginTop: 15 }} >
+                  <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{eventsArr[index]?.name}</Card.Title>            
+                  <Card.Divider />                              
 
-                <Text style={styles.fonts}>
-                    Description: {eventsArr[index]?.description}
-                </Text>
-                <Text style={styles.fonts}>
-                    Start Date & Time: {eventsArr[index]?.startDate.split(' ')[0]} at {eventsArr[index]?.startDate.split(' ')[1]}
-                </Text>
-                <Text style={styles.fonts}>
-                    End Date & Time: {eventsArr[index]?.endDate.split(' ')[0]} at {eventsArr[index]?.endDate.split(' ')[1]}
-                </Text>
-                <Text style={styles.fonts}>
-                    Location: ({eventsArr[index]?.latitude}, {eventsArr[index]?.longitude})
-                </Text>
-                <Text style={styles.fonts}>
-                    Number of Attendees: {Object.keys(eventsArr[index]?.attendedUsers).length - 1}
-                </Text>
-                <Text style={styles.fonts}>
-                    Contact Email: {eventsArr[index]?.contactEmail}
-                </Text>
-                <Text style={styles.fonts}>
-                    Contact Number: {eventsArr[index]?.contactNumber.substring(0, 3)}-{eventsArr[index]?.contactNumber.substring(3, 6)}-{eventsArr[index]?.contactNumber.substring(6, 10)}
-                </Text>
-            </Card> 
-            </View>
+                  <Text style={styles.fonts}>
+                      Description: {eventsArr[index]?.description}
+                  </Text>
+                  <Text style={styles.fonts}>
+                      Start Date & Time: {eventsArr[index]?.startDate.split(' ')[0]} at {eventsArr[index]?.startDate.split(' ')[1]}
+                  </Text>
+                  <Text style={styles.fonts}>
+                      End Date & Time: {eventsArr[index]?.endDate.split(' ')[0]} at {eventsArr[index]?.endDate.split(' ')[1]}
+                  </Text>
+                  <Text style={styles.fonts}>
+                      Location: ({eventsArr[index]?.latitude}, {eventsArr[index]?.longitude})
+                  </Text>
+                  <Text style={styles.fonts}>
+                      Number of Attendees: {Object.keys(eventsArr[index]?.attendedUsers).length - 1}
+                  </Text>
+                  <Text style={styles.fonts}>
+                      Contact Email: {eventsArr[index]?.contactEmail}
+                  </Text>
+                  <Text style={styles.fonts}>
+                      Contact Number: {eventsArr[index]?.contactNumber.substring(0, 3)}-{eventsArr[index]?.contactNumber.substring(3, 6)}-{eventsArr[index]?.contactNumber.substring(6, 10)}
+                  </Text>
+
+                  <QRCode
+                    value={eidArr[index]}
+                    logo={require("../assets/logo.png")}
+                    logoBackgroundColor='white'
+                    logoSize={60}
+                    size={300}
+                    color={'#32174d'}
+                    
+                    // enableLinearGradient={true}
+                    // linearGradient={['#f7ff00','#db36a4']}
+                    // gradientDirection={[0,45,44,0]}
+                  />
+                  
+              </Card>
+              </View>            
+            
             )})
           }                                            
         </ScrollView>
