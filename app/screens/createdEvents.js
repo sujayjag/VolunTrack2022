@@ -46,14 +46,8 @@ const createdEvents = ({ navigation }) => {
             // values of created event keys stored in state variable
             else {
                 setCreated(Object.values(snapshot.val().createdEvents))
-                if (created.length == 2) {
-                    setFlag("You have created an event");
-                }
-                else if (created.length == 3) {
-                    setFlag("You have created an event and one is ongoing/upcoming");
-                } 
-                else {
-                    setFlag("You have created multiple events");
+                if (created.length >= 2) {
+                    setFlag("You have created one or more events");
                 }
 
                 let createdArr = []
@@ -68,7 +62,7 @@ const createdEvents = ({ navigation }) => {
                     
                     get(child(dbref, `Events/${eid}`))
                     .then((snapshot) => {
-                        if(snapshot.exists) {
+                        if(snapshot.exists()) {
                             let info = snapshot.val()
                             createdArr.push(info)
                             setEventsArr(createdArr)
@@ -92,7 +86,7 @@ const createdEvents = ({ navigation }) => {
                   
                   get(child(dbref, `Events/${eid}`))
                   .then((snapshot) => {
-                      if(snapshot.exists) {
+                      if(snapshot.exists()) {
 
                           let info = snapshot.val()
                           createdArr.push(info)
@@ -107,7 +101,7 @@ const createdEvents = ({ navigation }) => {
                           
                             get(child(dbref, `Users/${cur}`))
                               .then((snapshot) => {
-                                if(snapshot.exists) {
+                                if(snapshot.exists()) {
                                   let curData = {
                                     uid: cur,
                                     firstName: snapshot.val().firstName,
@@ -161,14 +155,10 @@ const createdEvents = ({ navigation }) => {
     // })
     return (       
         <ScrollView>{
-          // eventsArr.length !== 0 &&
+          eventsArr.length !== 0 &&
           eventsArr.map((element, index) => { return (
             <View>
-              {/* <Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>
-              <Text style={{ fontSize: 24, color: 'red' }}>Event info: {JSON.stringify(eventsArr[0]['name'])}</Text>
-              <Text style={{ fontSize: 24, color: 'grey' }}>Event info: {eventStr}</Text>
-
-              <Text style={{ fontSize: 24, color: 'orange' }}>Event info: {attendeesStr}</Text>   */}
+              {<Text style={{ fontSize: 15, color: 'black', textAlign: 'center', fontWeight: 'bold' }}>{flag}</Text>}
               <Card containerStyle={{ marginTop: 15 }}>
                 <Card.Title style={{ fontSize: 20, textAlign: 'center'}}>{eventsArr[index]?.name}</Card.Title>            
                 <Card.Divider />                              
@@ -186,7 +176,7 @@ const createdEvents = ({ navigation }) => {
                     Location: ({eventsArr[index]?.latitude}, {eventsArr[index]?.longitude})
                 </Text>
                 <Text style={styles.fonts}>
-                    Attendees: {Object.keys(eventsArr[index]?.attendedUsers).length - 1}
+                    Number of Attendees: {Object.keys(eventsArr[index]?.attendedUsers).length - 1}
                 </Text>
                 <Text style={styles.fonts}>
                     Contact Email: {eventsArr[index]?.contactEmail}
