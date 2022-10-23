@@ -10,7 +10,7 @@ import { getDatabase, ref, set, child, update, remove, get, push } from "firebas
 export default function Join() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [text, setText] = useState('Not yet scanned')
+  const [text, setText] = useState('')
   const [x, setX] = useState(false)
   const [buttonText, setButtonText] = useState("Successfully Signed In!\nTap to Scan Out.")
   const [buttonColor, setButtonColor] = useState("green")
@@ -56,7 +56,7 @@ export default function Join() {
             .then((event) => {
               //alert("Lit")
              push(ref(db, path + "/attendedUsers/"), uid)
-              .then((event) => alert("Lit"))
+              //.then((event) => alert("Lit"))
               .catch((error) => alert(error.message))
             })
             .catch((error) => {alert(error.message)})
@@ -111,7 +111,7 @@ export default function Join() {
           style={{ height: 400, width: 400 }} />
       </View>
       <Text style={styles.maintext}>{text}</Text>
-      {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+      {scanned && <Button title={buttonText} color={buttonColor} onPress={() => setValues(false)} />}
       
 
     </View>
