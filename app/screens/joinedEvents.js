@@ -49,7 +49,7 @@ const joinedEvents = ({ navigation }) => {
                     setFlag("You have attended an event and one is ongoing");
                 } 
                 else {
-                    setFlag("You have attended some events and one is ongoing");
+                    setFlag("You have attended multiple events and one is ongoing");
                 }
 
                 let joinedArr = []
